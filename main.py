@@ -40,6 +40,6 @@ print trainer.train()
 
 # NOTE some useful func
 # ====================================================
-#ds = SequentialDataSet.loadFromFile(’some_file.csv’)
+# ds = SequentialDataSet.loadFromFile('some_file.csv')
 # ====================================================
 
