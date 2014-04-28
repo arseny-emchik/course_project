@@ -4,6 +4,7 @@
 # =======================================================
 from abc import ABCMeta, abstractmethod, abstractproperty
 import csv
+import os
 
 #import pybrain
 from pybrain.tools.shortcuts import buildNetwork
@@ -28,10 +29,16 @@ class InterfaceNN:
         self.csv_file = csv.reader(hFile)
         return self.csv_file
 
-
+    # test method
     def show_CSV(self):
         for row in self.csv_file:
             print row
+
+    def count_inputs(self, number_inputs = -1):
+        for row in self.csv_file:
+            return len(row) - 1 if number_inputs == -1 else number_inputs
+        return 0
+
 
 
 # =======================================================
@@ -66,8 +73,9 @@ second = Class2()
 print first.showPlot() + second.showPlot()
 
 #test 2
-# first.load_CSV('iris_dataset.csv')
-# first.show_CSV()
+first.load_CSV('data_sets/iris_dataset.csv')
+#first.show_CSV()
+print first.count_inputs()
 
 
 
