@@ -43,3 +43,6 @@ print trainer.train()
 # ds = SequentialDataSet.loadFromFile('some_file.csv')
 # ====================================================
 
+
+
+
