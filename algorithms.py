@@ -28,6 +28,9 @@ class InterfaceNN:
         self.csv_file = csv.reader(self.hFile)
         return self.csv_file
 
+    def prepare_CSV(self):
+        a = 1
+
     # test method
     def show_CSV(self):
         for row in self.csv_file:
@@ -45,24 +48,19 @@ class InterfaceNN:
 #           Algorithms
 # =======================================================
 class Class1(InterfaceNN):
-    def m_activate(self, hidden_layers = 3, num_outputs = 1, num_inputs = -1, hiddenclass = None):
+    def activate(self, hidden_layers = 3, num_outputs = 1, num_inputs = -1, hiddenclass = None):
         num_inputs = self.count_inputs() if num_inputs == -1 else num_inputs
         if num_inputs <= 0:
             return
 
         net = buildNetwork(num_inputs, hidden_layers, num_outputs)
-        # net.activate([num_inputs, num_outputs])
         ds = SupervisedDataSet(num_inputs, num_outputs)
 
         self.hFile.seek(0)
         for row in self.csv_file:
-            data = [float(x) for x in row.strip().split(',') if x != '']
-            indata = data[:num_inputs]
-            outdata = data[num_inputs:]
-            #ds.addSample(indata, outdata)
-
-
-
+            indata = [float(x) for x in row[:num_inputs]]
+            outdata = [float(x) for x in row[num_inputs:]]
+            ds.addSample(indata, outdata)
 
     def training(self):
         a = 1
@@ -85,7 +83,7 @@ print first.showPlot() + second.showPlot()
 #test 2
 csv_file = first.load_CSV('data_sets/iris_dataset.csv')
 first.show_CSV()
-first.m_activate()
+first.activate()
 print first.count_inputs()
 
 
