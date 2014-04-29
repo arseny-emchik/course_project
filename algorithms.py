@@ -76,16 +76,14 @@ class Class2(InterfaceNN):
         return 2
 
 
-# test 1
-first = Backprop()
-second = Class2()
-print first.showPlot() + second.showPlot()
 
-#test 2
-csv_file = first.load_CSV('data_sets/new_iris_dataset.csv')
-first.show_CSV()
-first.train()
-print first.count_inputs()
+#test
+b = Backprop()
+csv_file = b.load_CSV('data_sets/new_iris_dataset.csv')
+b.show_CSV()
+print b.count_inputs()
+b.train()
+
 
 
 
