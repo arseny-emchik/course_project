@@ -26,10 +26,12 @@ class InterfaceNN:
     def load_CSV(self, file_name):
         self.hFile = open(file_name, 'rb')
         self.csv_file = csv.reader(self.hFile)
+        self.row_count = sum(1 for row in self.csv_file)
         return self.csv_file
 
     # test method
     def show_CSV(self):
+        self.hFile.seek(0)
         for row in self.csv_file:
             print row
 
@@ -48,24 +50,33 @@ class Backprop(InterfaceNN):
     def buildNet(self, hidden_layers, num_outputs, num_inputs, hiddenclass):
         return buildNetwork(num_inputs, hidden_layers, num_outputs)
 
-    def load_data(self, num_inputs, num_outputs):
+    def load_data(self, percent, num_inputs, num_outputs):
         ds = SupervisedDataSet(num_inputs, num_outputs)
         self.hFile.seek(0)
-        for row in self.csv_file:
-            indata = row[:num_inputs]
-            outdata = row[num_inputs:]
+        for i in range(int(self.row_count*(float(percent)/100.0))):
+            print 1
+            data = self.csv_file.next()
+            indata = data[:num_inputs]
+            outdata = data[num_inputs:]
             ds.addSample(indata, outdata)
         return ds
 
-    def train(self, hidden_layers = 3, num_outputs = 1, num_inputs = -1, hiddenclass = None):
+    def train(self,
+              percent,
+              hidden_layers = 3,
+              num_outputs = 1,
+              num_inputs = -1,
+              hiddenclass = None):
         num_inputs = self.count_inputs() if num_inputs == -1 else num_inputs
         if num_inputs <= 0:
             return
 
         network = self.buildNet(hidden_layers, num_outputs, num_inputs, hiddenclass)
-        data_set = self.load_data(num_inputs, num_outputs)
+        data_set = self.load_data(percent, num_inputs, num_outputs)
         trainer = BackpropTrainer(network, data_set)
-        print trainer.train()
+        #print trainer.train()
+        return network
+
 
     def showPlot(self):
         return 1
@@ -82,7 +93,8 @@ b = Backprop()
 csv_file = b.load_CSV('data_sets/new_iris_dataset.csv')
 b.show_CSV()
 print b.count_inputs()
-b.train()
+network = b.train(15)
+
 
 
 
