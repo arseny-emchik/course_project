@@ -54,7 +54,6 @@ class Backprop(InterfaceNN):
         ds = SupervisedDataSet(num_inputs, num_outputs)
         self.hFile.seek(0)
         for i in range(int(self.row_count*(float(percent)/100.0))):
-            print 1
             data = self.csv_file.next()
             indata = data[:num_inputs]
             outdata = data[num_inputs:]
@@ -74,7 +73,8 @@ class Backprop(InterfaceNN):
         network = self.buildNet(hidden_layers, num_outputs, num_inputs, hiddenclass)
         data_set = self.load_data(percent, num_inputs, num_outputs)
         trainer = BackpropTrainer(network, data_set)
-        #print trainer.train()
+        trainer.train()
+        #trainer.trainUntilConvergence()
         return network
 
 
@@ -93,8 +93,8 @@ b = Backprop()
 csv_file = b.load_CSV('data_sets/new_iris_dataset.csv')
 b.show_CSV()
 print b.count_inputs()
-network = b.train(15)
-
+network = b.train(90)
+print network.activate([5.1, 3.5, 1.4, 0.2])
 
 
 
