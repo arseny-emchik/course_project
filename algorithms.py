@@ -4,7 +4,6 @@
 # =======================================================
 from abc import ABCMeta, abstractmethod, abstractproperty
 import csv
-import os
 
 #import pybrain
 from pybrain.tools.shortcuts import buildNetwork
@@ -25,8 +24,8 @@ class InterfaceNN:
         """Show plot"""
 
     def load_CSV(self, file_name):
-        hFile = open(file_name, 'rb')
-        self.csv_file = csv.reader(hFile)
+        self.hFile = open(file_name, 'rb')
+        self.csv_file = csv.reader(self.hFile)
         return self.csv_file
 
     # test method
@@ -35,6 +34,7 @@ class InterfaceNN:
             print row
 
     def count_inputs(self, number_inputs = -1):
+        self.hFile.seek(0)
         for row in self.csv_file:
             return len(row) - 1 if number_inputs == -1 else number_inputs
         return 0
@@ -45,18 +45,28 @@ class InterfaceNN:
 #           Algorithms
 # =======================================================
 class Class1(InterfaceNN):
-    # def data_training(self):
-    #     net = buildNetwork(1, 2, 1, bias=True,
-    #                        hiddenclass=TanhLayer,
-    #                        outclass=TanhLayer,
-    #                        recurrent=True)
-    #     recCon = FullConnection(net['out'], net['hidden0'])
-    #
-    # net.addRecurrentConnection(recCon)
-    # net.sortModules()
-    # # Create a trainer for backprop and train the net.
-    # trainer = BackpropTrainer(net, ds, learningrate=0.05)
-    # trainer.trainEpochs(1000)
+    def m_activate(self, hidden_layers = 3, num_outputs = 1, num_inputs = -1, hiddenclass = None):
+        num_inputs = self.count_inputs() if num_inputs == -1 else num_inputs
+        if num_inputs <= 0:
+            return
+
+        net = buildNetwork(num_inputs, hidden_layers, num_outputs)
+        # net.activate([num_inputs, num_outputs])
+        ds = SupervisedDataSet(num_inputs, num_outputs)
+
+        self.hFile.seek(0)
+        for row in self.csv_file:
+            data = [float(x) for x in row.strip().split(',') if x != '']
+            indata = data[:num_inputs]
+            outdata = data[num_inputs:]
+            #ds.addSample(indata, outdata)
+
+
+
+
+    def training(self):
+        a = 1
+
 
     def showPlot(self):
         return 1
@@ -73,8 +83,9 @@ second = Class2()
 print first.showPlot() + second.showPlot()
 
 #test 2
-first.load_CSV('data_sets/iris_dataset.csv')
-#first.show_CSV()
+csv_file = first.load_CSV('data_sets/iris_dataset.csv')
+first.show_CSV()
+first.m_activate()
 print first.count_inputs()
 
 
