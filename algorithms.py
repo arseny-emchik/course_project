@@ -28,9 +28,6 @@ class InterfaceNN:
         self.csv_file = csv.reader(self.hFile)
         return self.csv_file
 
-    def prepare_CSV(self):
-        a = 1
-
     # test method
     def show_CSV(self):
         for row in self.csv_file:
@@ -47,24 +44,28 @@ class InterfaceNN:
 # =======================================================
 #           Algorithms
 # =======================================================
-class Class1(InterfaceNN):
-    def activate(self, hidden_layers = 3, num_outputs = 1, num_inputs = -1, hiddenclass = None):
+class Backprop(InterfaceNN):
+    def buildNet(self, hidden_layers, num_outputs, num_inputs, hiddenclass):
+        return buildNetwork(num_inputs, hidden_layers, num_outputs)
+
+    def load_data(self, num_inputs, num_outputs):
+        ds = SupervisedDataSet(num_inputs, num_outputs)
+        self.hFile.seek(0)
+        for row in self.csv_file:
+            indata = row[:num_inputs]
+            outdata = row[num_inputs:]
+            ds.addSample(indata, outdata)
+        return ds
+
+    def train(self, hidden_layers = 3, num_outputs = 1, num_inputs = -1, hiddenclass = None):
         num_inputs = self.count_inputs() if num_inputs == -1 else num_inputs
         if num_inputs <= 0:
             return
 
-        net = buildNetwork(num_inputs, hidden_layers, num_outputs)
-        ds = SupervisedDataSet(num_inputs, num_outputs)
-
-        self.hFile.seek(0)
-        for row in self.csv_file:
-            indata = [float(x) for x in row[:num_inputs]]
-            outdata = [float(x) for x in row[num_inputs:]]
-            ds.addSample(indata, outdata)
-
-    def training(self):
-        a = 1
-
+        network = self.buildNet(hidden_layers, num_outputs, num_inputs, hiddenclass)
+        data_set = self.load_data(num_inputs, num_outputs)
+        trainer = BackpropTrainer(network, data_set)
+        print trainer.train()
 
     def showPlot(self):
         return 1
@@ -76,14 +77,14 @@ class Class2(InterfaceNN):
 
 
 # test 1
-first = Class1()
+first = Backprop()
 second = Class2()
 print first.showPlot() + second.showPlot()
 
 #test 2
-csv_file = first.load_CSV('data_sets/iris_dataset.csv')
+csv_file = first.load_CSV('data_sets/new_iris_dataset.csv')
 first.show_CSV()
-first.activate()
+first.train()
 print first.count_inputs()
 
 
