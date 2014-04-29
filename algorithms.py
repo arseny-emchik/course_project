@@ -10,8 +10,10 @@ from pybrain.tools.shortcuts import buildNetwork
 from pybrain.datasets import SupervisedDataSet
 from pybrain.structure import TanhLayer
 from pybrain.supervised.trainers import BackpropTrainer
-# =======================================================
 
+from sklearn.metrics import confusion_matrix
+import pylab as pl
+# =======================================================
 
 # =======================================================
 #           Neural Network Interface
@@ -73,10 +75,40 @@ class Backprop(InterfaceNN):
         network = self.buildNet(hidden_layers, num_outputs, num_inputs, hiddenclass)
         data_set = self.load_data(percent, num_inputs, num_outputs)
         trainer = BackpropTrainer(network, data_set)
+
         for i in range(30):
             trainer.train()
-        #trainer.trainUntilConvergence()
+
+        self.net = network
+        self.ds = data_set
         return network
+
+    def calculate_entire_ds(self):
+        y_true = []
+        y_predict = []
+
+        for i in self.ds:
+            predict = int(round(self.net.activate(i[0])))
+            true = int(i[1][0])
+            y_predict.append(predict)
+            y_true.append(true)
+
+        # print "{} {}".format(predict,true)
+        # print y_true
+        # print y_predict
+
+        self.y_predict = y_predict
+        self.y_true = y_true
+
+    def draw_confusion_matrix(self):
+        self.calculate_entire_ds()
+        cm = confusion_matrix(self.y_true, self.y_predict)
+        pl.matshow(cm)
+        pl.title('Confusion matrix')
+        pl.colorbar()
+        pl.ylabel('True label')
+        pl.xlabel('Predicted label')
+        pl.show()
 
 
     def showPlot(self):
@@ -96,7 +128,6 @@ b.show_CSV()
 print b.count_inputs()
 network = b.train(90)
 print network.activate([5.1, 3.5, 1.4, 0.2])
+b.draw_confusion_matrix()
 
-
-
-
+print "Predict y:\n{}".format(b.y_predict)
