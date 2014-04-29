@@ -73,7 +73,8 @@ class Backprop(InterfaceNN):
         network = self.buildNet(hidden_layers, num_outputs, num_inputs, hiddenclass)
         data_set = self.load_data(percent, num_inputs, num_outputs)
         trainer = BackpropTrainer(network, data_set)
-        trainer.train()
+        for i in range(30):
+            trainer.train()
         #trainer.trainUntilConvergence()
         return network
 
