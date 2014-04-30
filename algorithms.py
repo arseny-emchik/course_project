@@ -25,6 +25,16 @@ class InterfaceNN:
     def showPlot(self):
         """Show plot"""
 
+    @abstractmethod
+    def train(self,
+              cycles,
+              percent,
+              hidden_layers=3,
+              num_outputs=1,
+              num_inputs=-1,
+              hiddenclass=None):
+        """train net"""
+
     def load_CSV(self, file_name):
         self.hFile = open(file_name, 'rb')
         self.csv_file = csv.reader(self.hFile)
@@ -37,12 +47,11 @@ class InterfaceNN:
         for row in self.csv_file:
             print row
 
-    def count_inputs(self, number_inputs = -1):
+    def count_inputs(self, number_inputs=-1):
         self.hFile.seek(0)
         for row in self.csv_file:
             return len(row) - 1 if number_inputs == -1 else number_inputs
         return 0
-
 
 
 # =======================================================
@@ -52,10 +61,14 @@ class Backprop(InterfaceNN):
     def buildNet(self, hidden_layers, num_outputs, num_inputs, hiddenclass):
         return buildNetwork(num_inputs, hidden_layers, num_outputs)
 
-    def load_data(self, percent, num_inputs, num_outputs):
+    def get_data_set(self, percent, num_inputs=-1, num_outputs=1):
+        num_inputs = self.count_inputs() if num_inputs == -1 else num_inputs
+        if num_inputs <= 0 or num_outputs <= 0 or percent <= 0:
+            return
+
         ds = SupervisedDataSet(num_inputs, num_outputs)
         self.hFile.seek(0)
-        for i in range(int(self.row_count*(float(percent)/100.0))):
+        for i in range(int(self.row_count * (float(percent) / 100.0))):
             data = self.csv_file.next()
             indata = data[:num_inputs]
             outdata = data[num_inputs:]
@@ -63,32 +76,38 @@ class Backprop(InterfaceNN):
         return ds
 
     def train(self,
+              cycles,
               percent,
-              hidden_layers = 3,
-              num_outputs = 1,
-              num_inputs = -1,
-              hiddenclass = None):
+              hidden_layers=3,
+              num_outputs=1,
+              num_inputs=-1,
+              hiddenclass=None):
         num_inputs = self.count_inputs() if num_inputs == -1 else num_inputs
-        if num_inputs <= 0:
+        if num_inputs <= 0 or num_outputs <= 0 or cycles <= 0 or (percent > 100 or percent <= 0):
             return
 
         network = self.buildNet(hidden_layers, num_outputs, num_inputs, hiddenclass)
-        data_set = self.load_data(percent, num_inputs, num_outputs)
+        data_set = self.get_data_set(percent, num_inputs, num_outputs)
         trainer = BackpropTrainer(network, data_set)
 
-        for i in range(30):
+        for i in range(cycles):
             trainer.train()
 
-        self.net = network
-        self.ds = data_set
         return network
 
-    def calculate_entire_ds(self):
+    def showPlot(self):
+        return 1
+
+# =======================================================
+#           CONTROL
+# =======================================================
+class Control:
+    def calculate_entire_ds(self, network, data_set):
         y_true = []
         y_predict = []
 
-        for i in self.ds:
-            predict = int(round(self.net.activate(i[0])))
+        for i in data_set:
+            predict = int(round(network.activate(i[0])))
             true = int(i[1][0])
             y_predict.append(predict)
             y_true.append(true)
@@ -96,13 +115,11 @@ class Backprop(InterfaceNN):
         # print "{} {}".format(predict,true)
         # print y_true
         # print y_predict
+        return y_true, y_predict
 
-        self.y_predict = y_predict
-        self.y_true = y_true
-
-    def draw_confusion_matrix(self):
-        self.calculate_entire_ds()
-        cm = confusion_matrix(self.y_true, self.y_predict)
+    def draw_confusion_matrix(self, network, data_set):
+        y_true, y_predict = self.calculate_entire_ds(network, data_set)
+        cm = confusion_matrix(y_true, y_predict)
         pl.matshow(cm)
         pl.title('Confusion matrix')
         pl.colorbar()
@@ -111,23 +128,14 @@ class Backprop(InterfaceNN):
         pl.show()
 
 
-    def showPlot(self):
-        return 1
-
-
-class Class2(InterfaceNN):
-    def showPlot(self):
-        return 2
-
-
 
 #test
+c = Control()
 b = Backprop()
-csv_file = b.load_CSV('data_sets/new_iris_dataset.csv')
-b.show_CSV()
-print b.count_inputs()
-network = b.train(90)
-print network.activate([5.1, 3.5, 1.4, 0.2])
-b.draw_confusion_matrix()
 
-print "Predict y:\n{}".format(b.y_predict)
+b.load_CSV('data_sets/new_iris_dataset.csv')
+network = b.train(60, 90)
+data_set = b.get_data_set(100)
+
+c.draw_confusion_matrix(network, data_set)
+#print "Predict y:\n{}".format(c.y_predict)
