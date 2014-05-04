@@ -227,12 +227,12 @@ class SVM(InterfaceClassifier):
 # =======================================================
 class Control:
     # private class methods
-    def __calculate_entire_ds(self, network, data_set):
+    def __calculate_entire_ds(self, function, data_set):
         y_true = []
         y_predict = []
 
         for i in data_set:
-            predict = int(round(network.activate(i[0])))
+            predict = int(round(function(i[0])))
             true = int(i[1][0])
             y_predict.append(predict)
             y_true.append(true)
@@ -243,8 +243,8 @@ class Control:
         return y_true, y_predict
 
     # public methods
-    def draw_confusion_matrix(self, network, data_set):
-        y_true, y_predict = self.__calculate_entire_ds(network, data_set)
+    def draw_confusion_matrix(self, function, data_set):
+        y_true, y_predict = self.__calculate_entire_ds(function, data_set)
         cm = confusion_matrix(y_true, y_predict)
         pl.matshow(cm)
         pl.title('Confusion matrix')
@@ -253,8 +253,8 @@ class Control:
         pl.xlabel('Predicted label')
         pl.show()
 
-    def draw_roc(self, network, data_set):
-        y_true, y_predict = self.__calculate_entire_ds(network, data_set)
+    def draw_roc(self, function, data_set):
+        y_true, y_predict = self.__calculate_entire_ds(function, data_set)
         fpr, tpr, thresholds = roc_curve(y_true, y_predict)
         roc_auc = auc(fpr, tpr)
         print("Area under the ROC curve : %f" % roc_auc)
@@ -272,41 +272,38 @@ class Control:
         pl.show()
 
 
-# tested 04.05.14 by ars
+# tested 04.05.14 by ars & alex =)
 c = Control()
 
-#test 1
-b = Backprop()
-b.load_CSV('data_sets/new_iris_dataset.csv')
-network = b.train(60, 90)
-data_set = b.get_data_set(100)
-
-c.draw_confusion_matrix(network, data_set)
-
-#test 2
-d = DTree()
-d.load_CSV('data_sets/new_iris_dataset.csv')
-network = d.train(90)
-data_set = d.get_data_set(100)
-
-#c.draw_confusion_matrix(network, data_set)
-
-# test 3
-r = Rprop()
-d.load_CSV('data_sets/new_iris_dataset.csv')
-network = d.train(60, 90)
-data_set = d.get_data_set(100)
-
-#c.draw_confusion_matrix(network, data_set)
+# #test 1
+# b = Backprop()
+# b.load_CSV('data_sets/new_iris_dataset.csv')
+# network = b.train(60, 90)
+# data_set = b.get_data_set(100)
+# c.draw_confusion_matrix(network.activate, data_set)
+#
+# c.draw_confusion_matrix(network, data_set)
+#
+# #test 2
+# d = DTree()
+# d.load_CSV('data_sets/new_iris_dataset.csv')
+# network = d.train(90)
+# data_set = d.get_data_set(100)
+#
+# #c.draw_confusion_matrix(network, data_set)
+#
+# # test 3
+# r = Rprop()
+# d.load_CSV('data_sets/new_iris_dataset.csv')
+# network = d.train(60, 90)
+# data_set = d.get_data_set(100)
+#
+# #c.draw_confusion_matrix(network, data_set)
 
 #test 4
 d = SVM()
 d.load_CSV('data_sets/new_iris_dataset.csv')
 clf = d.train(90)
 data_set = d.get_data_set(100)
-
-for i in data_set:
-   print clf.predict(i[0])
-
-# print "Predict y:\n{}".format(c.y_predict) ??!
-
+c.draw_confusion_matrix(clf.predict, data_set)
+data_set = d.get_data_set(100)
