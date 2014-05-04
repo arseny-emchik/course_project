@@ -4,6 +4,7 @@
 # =======================================================
 from abc import ABCMeta, abstractmethod, abstractproperty
 import csv
+import numpy as np
 
 from pybrain.tools.shortcuts import buildNetwork
 from pybrain.datasets import SupervisedDataSet
@@ -13,6 +14,7 @@ from pybrain.supervised.trainers import RPropMinusTrainer
 
 from sklearn.metrics import confusion_matrix, roc_curve, auc
 from sklearn.tree import DecisionTreeClassifier
+from sklearn import svm
 
 import pylab as pl
 from random import randint
@@ -198,6 +200,23 @@ class DTree(InterfaceNN):
         return clf
 
 # =======================================================
+#           Support Vector Machines
+# =======================================================
+
+class SVM(InterfaceNN):
+    def train(self,
+              percent,
+              num_outputs=1,
+              num_inputs=-1,
+              hiddenclass=None):
+        num_inputs = self.count_inputs() if num_inputs == -1 else num_inputs
+        data_set = self.get_data_set(percent, num_inputs, num_outputs)
+        clf = svm.SVC()
+        clf = svm.SVC().fit(data_set['input'], np.ravel(data_set['target']))
+
+        return clf
+
+# =======================================================
 #           CONTROL
 # =======================================================
 class Control:
@@ -263,7 +282,7 @@ class Control:
 # if b.is_binary():
 #     c.draw_roc(network, data_set)
 
-d = DTree()
+d = SVM()
 d.load_CSV('data_sets/new_iris_dataset.csv')
 clf = d.train(90)
 data_set = d.get_data_set(100)
