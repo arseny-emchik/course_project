@@ -5,24 +5,28 @@
 from abc import ABCMeta, abstractmethod, abstractproperty
 import csv
 import numpy as np
+import pylab as pl
+from random import randint
 
 from pybrain.tools.shortcuts import buildNetwork
 from pybrain.datasets import SupervisedDataSet
-from pybrain.structure import TanhLayer
+
 from pybrain.supervised.trainers import BackpropTrainer
 from pybrain.supervised.trainers import RPropMinusTrainer
 
-from sklearn.metrics import confusion_matrix, roc_curve, auc
 from sklearn.tree import DecisionTreeClassifier
 from sklearn import svm
 
-import pylab as pl
-from random import randint
+#metrics for classification
+from sklearn.metrics import confusion_matrix, roc_curve, auc
 
 # for clustering
 from sklearn.cluster import MeanShift, estimate_bandwidth
 from itertools import cycle
 import mpl_toolkits.mplot3d.axes3d as p3
+
+#metrics for clustering
+import sklearn.metrics.cluster as cluster_metrics
 # =======================================================
 
 # =======================================================
@@ -264,7 +268,7 @@ class MSC(InterfaceML):
         labels_unique = np.unique(self.__labels)
         self.__n_clusters = len(labels_unique)
 
-        return self.__n_clusters, self.__cluster_centers
+        return ms
 
     def showPlot(self):
         fig = pl.figure()
@@ -368,5 +372,11 @@ c = Control()
 #test 5
 m = MSC()
 m.load_CSV('data_sets/new_iris_dataset.csv')
-num_clusters = m.train()
-m.showPlot()
+ms = m.train()
+data_set = m.get_data_set(100)
+labels_true = np.ravel(data_set['target'].astype(np.int))
+labels_predict = ms.labels_.astype(np.int)
+print cluster_metrics.completeness_score(labels_true, labels_predict)
+print cluster_metrics.homogeneity_score(labels_true, labels_predict)
+print cluster_metrics.mutual_info_score(labels_true, labels_predict)
+#m.showPlot()
