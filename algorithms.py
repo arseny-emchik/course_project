@@ -28,7 +28,7 @@ import mpl_toolkits.mplot3d.axes3d as p3
 # =======================================================
 #          Classifier Interface
 # =======================================================
-class InterfaceClassifier:
+class InterfaceML:
     __metaclass__ = ABCMeta
 
     # private class variables
@@ -152,7 +152,7 @@ class InterfaceClassifier:
 # =======================================================
 #           Back propagation
 # =======================================================
-class Backprop(InterfaceClassifier):
+class Backprop(InterfaceML):
     def train(self,
               cycles,
               percent,
@@ -176,7 +176,7 @@ class Backprop(InterfaceClassifier):
 # =======================================================
 #           Resilient propagation
 # =======================================================
-class Rprop(InterfaceClassifier):
+class Rprop(InterfaceML):
     def train(self,
               cycles,
               percent,
@@ -201,7 +201,7 @@ class Rprop(InterfaceClassifier):
 # =======================================================
 #           Decision Tree
 # =======================================================
-class DTree(InterfaceClassifier):
+class DTree(InterfaceML):
     def train(self,
               percent,
               num_outputs=1,
@@ -216,7 +216,7 @@ class DTree(InterfaceClassifier):
 # =======================================================
 #           Support Vector Machines
 # =======================================================
-class SVM(InterfaceClassifier):
+class SVM(InterfaceML):
     def train(self,
               percent,
               num_outputs=1,
@@ -231,7 +231,7 @@ class SVM(InterfaceClassifier):
 # =======================================================
 #           Mean-shift clustering algorithm
 # =======================================================
-class MSC(InterfaceClassifier):
+class MSC(InterfaceML):
 
     __n_clusters = None
     __cluster_centers = None
