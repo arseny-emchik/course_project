@@ -18,6 +18,11 @@ from sklearn import svm
 
 import pylab as pl
 from random import randint
+
+# for clustering
+from sklearn.cluster import MeanShift, estimate_bandwidth
+from itertools import cycle
+import mpl_toolkits.mplot3d.axes3d as p3
 # =======================================================
 
 # =======================================================
@@ -27,11 +32,12 @@ class InterfaceClassifier:
     __metaclass__ = ABCMeta
 
     # private class variables
-    __hFile = None
-    __csv_file = None
     __row_count = None
     __binary = False
     __data_set = None
+
+    _csv_file = None
+    _hFile = None
 
     # private class methods
     def __get_full_data_set(self, num_inputs=-1, num_outputs=1):
@@ -40,8 +46,8 @@ class InterfaceClassifier:
             return
 
         self.__data_set = SupervisedDataSet(num_inputs, num_outputs)
-        self.hFile.seek(0)
-        for row in self.csv_file:
+        self._hFile.seek(0)
+        for row in self._csv_file:
             indata = row[:num_inputs]
             outdata = row[num_inputs:]
             self.__data_set.addSample(indata, outdata)
@@ -65,8 +71,8 @@ class InterfaceClassifier:
 
     # protected class methods
     def _count_inputs(self, number_inputs=-1):
-        self.hFile.seek(0)
-        for row in self.csv_file:
+        self._hFile.seek(0)
+        for row in self._csv_file:
             return len(row) - 1 if number_inputs == -1 else number_inputs
         return 0
 
@@ -75,20 +81,20 @@ class InterfaceClassifier:
 
     # public class methods
     def load_CSV(self, file_name):
-        self.hFile = open(file_name, 'rb')
-        self.csv_file = csv.reader(self.hFile)
-        self.row_count = sum(1 for row in self.csv_file)
+        self._hFile = open(file_name, 'rb')
+        self._csv_file = csv.reader(self._hFile)
+        self.row_count = sum(1 for row in self._csv_file)
         self.__data_set = self.__get_full_data_set()
 
         if len(self.__get_levels()) == 2:
             self.binary = True
 
-        return self.csv_file
+        return self._csv_file
 
     # test method
     def show_CSV(self):
-        self.hFile.seek(0)
-        for row in self.csv_file:
+        self._hFile.seek(0)
+        for row in self._csv_file:
             print row
 
     def is_binary(self):
@@ -223,6 +229,57 @@ class SVM(InterfaceClassifier):
         return clf
 
 # =======================================================
+#           Mean-shift clustering algorithm
+# =======================================================
+class MSC(InterfaceClassifier):
+
+    __n_clusters = None
+    __cluster_centers = None
+    __data = None
+    __labels = None
+
+    def __set_data(self):
+        if self._count_inputs < 3:
+            return
+
+        arr_rows = []
+        self._hFile.seek(0)
+
+        for row in self._csv_file:
+            arr = [float(x) for x in row[:3]]
+            arr_rows.append(arr) # 3 hard code
+
+        self.__data = np.array(arr_rows)
+
+    # have to change the name of func train
+    def train(self):
+        self.__set_data()
+        bandwidth = estimate_bandwidth(self.__data, quantile=0.15) #, n_samples=500
+
+        ms = MeanShift(bandwidth=bandwidth, bin_seeding=True)
+        ms.fit(self.__data)
+        self.__labels = ms.labels_
+        self.__cluster_centers = ms.cluster_centers_
+
+        labels_unique = np.unique(self.__labels)
+        self.__n_clusters = len(labels_unique)
+
+        return self.__n_clusters, self.__cluster_centers
+
+    def showPlot(self):
+        fig = pl.figure()
+        ax = p3.Axes3D(fig)
+        ax.view_init(7, -80)
+        for l in np.unique(self.__labels):
+            ax.plot3D(self.__data[self.__labels == l, 0], self.__data[self.__labels == l, 1], self.__data[self.__labels == l, 2],
+                      'o', color=pl.cm.jet(float(l) / np.max(self.__labels + 1)))
+
+        pl.title("Number of estimated clusters : %d" % self.__n_clusters)
+        pl.show()
+
+
+
+# =======================================================
 #           CONTROL
 # =======================================================
 class Control:
@@ -300,10 +357,16 @@ c = Control()
 #
 # #c.draw_confusion_matrix(network, data_set)
 
-#test 4
-d = SVM()
-d.load_CSV('data_sets/new_iris_dataset.csv')
-clf = d.train(90)
-data_set = d.get_data_set(100)
-c.draw_confusion_matrix(clf.predict, data_set)
-data_set = d.get_data_set(100)
+# #test 4
+# d = SVM()
+# d.load_CSV('data_sets/new_iris_dataset.csv')
+# clf = d.train(90)
+# data_set = d.get_data_set(100)
+# c.draw_confusion_matrix(clf.predict, data_set)
+# data_set = d.get_data_set(100)
+
+#test 5
+m = MSC()
+m.load_CSV('data_sets/new_iris_dataset.csv')
+num_clusters = m.train()
+m.showPlot()
