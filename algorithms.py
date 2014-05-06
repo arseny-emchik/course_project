@@ -25,8 +25,11 @@ from sklearn.cluster import MeanShift, estimate_bandwidth
 from itertools import cycle
 import mpl_toolkits.mplot3d.axes3d as p3
 
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import DBSCAN
+
 #metrics for clustering
-import sklearn.metrics.cluster as cluster_metrics
+from sklearn import metrics
 # =======================================================
 
 # =======================================================
@@ -38,8 +41,8 @@ class InterfaceML:
     # private class variables
     __row_count = None
     __binary = False
-    __data_set = None
 
+    _data_set = None
     _csv_file = None
     _hFile = None
 
@@ -88,7 +91,7 @@ class InterfaceML:
         self._hFile = open(file_name, 'rb')
         self._csv_file = csv.reader(self._hFile)
         self.row_count = sum(1 for row in self._csv_file)
-        self.__data_set = self.__get_full_data_set()
+        self._data_set = self.__get_full_data_set()
 
         if len(self.__get_levels()) == 2:
             self.binary = True
@@ -242,22 +245,22 @@ class MSC(InterfaceML):
     __data = None
     __labels = None
 
-    def __set_data(self):
-        if self._count_inputs < 3:
+    def __set_data(self, n_inputs):
+        if self._count_inputs < n_inputs or n_inputs < 1:
             return
 
         arr_rows = []
         self._hFile.seek(0)
 
         for row in self._csv_file:
-            arr = [float(x) for x in row[:3]]
-            arr_rows.append(arr) # 3 hard code
+            arr = [float(x) for x in row[:n_inputs]]
+            arr_rows.append(arr)
 
         self.__data = np.array(arr_rows)
 
     # have to change the name of func train
-    def train(self):
-        self.__set_data()
+    def train(self, n_inputs):
+        self.__set_data(n_inputs)
         bandwidth = estimate_bandwidth(self.__data, quantile=0.15) #, n_samples=500
 
         ms = MeanShift(bandwidth=bandwidth, bin_seeding=True)
@@ -280,6 +283,79 @@ class MSC(InterfaceML):
 
         pl.title("Number of estimated clusters : %d" % self.__n_clusters)
         pl.show()
+
+# =======================================================
+#           DBSCAN clustering algorithm
+# =======================================================
+class DBScanC(InterfaceML):
+
+    __n_clusters = None
+    __cluster_centers = None
+    __data = None
+    __labels = None
+    __labels_true = None
+    __core_samples = None
+
+    def __set_data(self, n_inputs):
+        if self._count_inputs < n_inputs or n_inputs < 1:
+            return
+
+        arr_data = []
+        for row in self._data_set['input']:
+            arr_data.append(row[:n_inputs])
+
+        self.__data = np.array(arr_data)
+        a = np.ravel(self._data_set['target'])
+        self.__labels_true = np.ravel(self._data_set['target'])
+        self.__data = StandardScaler().fit_transform(self.__data)
+
+    def train(self, n_inputs):
+        self.__set_data(n_inputs)
+
+        db = DBSCAN(eps=0.4, min_samples=10).fit(self.__data)
+        self.__core_samples = db.core_sample_indices_
+        self.__labels = db.labels_
+
+        self.__n_clusters = len(set(self.__labels)) - (1 if -1 in self.__labels else 0)
+
+        print('Estimated number of clusters: %d' % self.__n_clusters)
+        print("Homogeneity: %0.3f" % metrics.homogeneity_score(self.__labels_true, self.__labels))
+        print("Completeness: %0.3f" % metrics.completeness_score(self.__labels_true, self.__labels))
+        print("V-measure: %0.3f" % metrics.v_measure_score(self.__labels_true, self.__labels))
+        print("Adjusted Rand Index: %0.3f"
+              % metrics.adjusted_rand_score(self.__labels_true, self.__labels))
+        print("Adjusted Mutual Information: %0.3f"
+              % metrics.adjusted_mutual_info_score(self.__labels_true, self.__labels))
+        print("Silhouette Coefficient: %0.3f"
+              % metrics.silhouette_score(self.__data, self.__labels))
+
+    def showPlot(self):
+        unique_labels = set(self.__labels)
+        colors = pl.cm.Spectral(np.linspace(0, 1, len(unique_labels)))
+        for k, col in zip(unique_labels, colors):
+            if k == -1:
+                # Black used for noise.
+                col = 'k'
+                markersize = 6
+            class_members = [index[0] for index in np.argwhere(self.__labels == k)]
+            cluster_core_samples = [index for index in self.__core_samples
+                                    if self.__labels[index] == k]
+            for index in class_members:
+                x = self.__data[index]
+                if index in self.__core_samples and k != -1:
+                    markersize = 14
+                else:
+                    markersize = 6
+                pl.plot(x[0], x[1], 'o', markerfacecolor=col,
+                        markeredgecolor='k', markersize=markersize)
+
+        pl.title('Estimated number of clusters: %d' % self.__n_clusters)
+        pl.show()
+
+
+
+
+
 
 
 
@@ -316,6 +392,8 @@ class Control:
 
     def draw_roc(self, function, data_set):
         y_true, y_predict = self.__calculate_entire_ds(function, data_set)
+        # print y_true
+        # print y_predict
         fpr, tpr, thresholds = roc_curve(y_true, y_predict)
         roc_auc = auc(fpr, tpr)
         print("Area under the ROC curve : %f" % roc_auc)
@@ -336,22 +414,20 @@ class Control:
 # tested 04.05.14 by ars & alex =)
 c = Control()
 
-# #test 1
-# b = Backprop()
-# b.load_CSV('data_sets/new_iris_dataset.csv')
-# network = b.train(60, 90)
-# data_set = b.get_data_set(100)
-# c.draw_confusion_matrix(network.activate, data_set)
-#
-# c.draw_confusion_matrix(network, data_set)
-#
-# #test 2
-# d = DTree()
-# d.load_CSV('data_sets/new_iris_dataset.csv')
-# network = d.train(90)
-# data_set = d.get_data_set(100)
-#
-# #c.draw_confusion_matrix(network, data_set)
+#test 1
+b = Backprop()
+b.load_CSV('data_sets/binary_iris_dataset.csv')
+network = b.train(60, 90)
+data_set = b.get_data_set(100)
+c.draw_roc(network.activate, data_set)
+#c.draw_confusion_matrix(network.activate, data_set)
+
+#test 2
+d = DTree()
+d.load_CSV('data_sets/new_iris_dataset.csv')
+clf = d.train(90)
+data_set = d.get_data_set(100)
+c.draw_confusion_matrix(clf.predict, data_set)
 #
 # # test 3
 # r = Rprop()
@@ -372,11 +448,16 @@ c = Control()
 #test 5
 m = MSC()
 m.load_CSV('data_sets/new_iris_dataset.csv')
-ms = m.train()
+ms = m.train(3) # n_inputs have to move into load_CSV
 data_set = m.get_data_set(100)
 labels_true = np.ravel(data_set['target'].astype(np.int))
 labels_predict = ms.labels_.astype(np.int)
-print cluster_metrics.completeness_score(labels_true, labels_predict)
-print cluster_metrics.homogeneity_score(labels_true, labels_predict)
-print cluster_metrics.mutual_info_score(labels_true, labels_predict)
-#m.showPlot()
+print metrics.completeness_score(labels_true, labels_predict)
+print metrics.homogeneity_score(labels_true, labels_predict)
+print metrics.mutual_info_score(labels_true, labels_predict)
+m.showPlot()
+
+s = DBScanC()
+s.load_CSV('data_sets/new_iris_dataset.csv')
+s.train(2)
+s.showPlot()
