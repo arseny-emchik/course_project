@@ -249,14 +249,11 @@ class MSC(InterfaceML):
         if self._count_inputs < n_inputs or n_inputs < 1:
             return
 
-        arr_rows = []
-        self._hFile.seek(0)
+        arr_data = []
+        for row in self._data_set['input']:
+            arr_data.append(row[:n_inputs])
 
-        for row in self._csv_file:
-            arr = [float(x) for x in row[:n_inputs]]
-            arr_rows.append(arr)
-
-        self.__data = np.array(arr_rows)
+        self.__data = np.array(arr_data)
 
     # have to change the name of func train
     def train(self, n_inputs):
@@ -351,13 +348,6 @@ class DBScanC(InterfaceML):
 
         pl.title('Estimated number of clusters: %d' % self.__n_clusters)
         pl.show()
-
-
-
-
-
-
-
 
 # =======================================================
 #           CONTROL
