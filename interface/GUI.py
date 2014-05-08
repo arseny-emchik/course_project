@@ -8,10 +8,13 @@ from gi.repository import Gtk
 # =======================================================
 #                  GUI
 # =======================================================
-
 class Handler:
     def onDeleteWindow(self, *args):
         Gtk.main_quit(*args)
+
+    def onExecute(self, *args):
+        print 'yeeeeessss'
+
 
 
 builder = Gtk.Builder()
