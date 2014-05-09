@@ -126,7 +126,6 @@ class WinBackPr:
 
     def showText(self, line):
         entryForText = self.__builder.get_object('main_text_view')
-        #entryForText.get_buffer().set_text('================')
         entryForText.get_buffer().insert(entryForText.get_buffer().get_end_iter(), line + '\n=============\n')
 
 
