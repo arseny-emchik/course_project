@@ -15,6 +15,9 @@ class Handler:
     def onExecute(self, *args):
         print 'yeeeeessss'
 
+    def algorithm5(self, *args):
+        print 5
+
 
 
 builder = Gtk.Builder()
