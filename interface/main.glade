@@ -7,13 +7,105 @@
     <property name="title" translatable="yes">quality_assessment</property>
     <property name="window_position">center</property>
     <property name="default_width">600</property>
-    <property name="default_height">500</property>
+    <property name="default_height">300</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog_1">
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
+        <child>
+          <object class="GtkBox" id="box3">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkPaned" id="paned3">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <child>
+                  <object class="GtkRadioButton" id="data_set_default">
+                    <property name="label" translatable="yes">radiobutton</property>
+                    <property name="use_action_appearance">False</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="use_action_appearance">False</property>
+                    <property name="xalign">0</property>
+                    <property name="active">True</property>
+                    <property name="draw_indicator">True</property>
+                    <signal name="toggled" handler="change_kind_data" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="resize">False</property>
+                    <property name="shrink">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBox" id="combobox1">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                  </object>
+                  <packing>
+                    <property name="resize">True</property>
+                    <property name="shrink">True</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkPaned" id="paned2">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <child>
+                  <object class="GtkRadioButton" id="data_set_file">
+                    <property name="label" translatable="yes">radiobutton</property>
+                    <property name="use_action_appearance">False</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="use_action_appearance">False</property>
+                    <property name="xalign">0</property>
+                    <property name="active">True</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="group">data_set_default</property>
+                    <signal name="toggled" handler="change_kind_data" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="resize">False</property>
+                    <property name="shrink">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFileChooserButton" id="filechooserbutton1">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                  </object>
+                  <packing>
+                    <property name="resize">True</property>
+                    <property name="shrink">True</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="main_buttons">
             <property name="can_focus">False</property>
@@ -77,23 +169,18 @@
           <object class="GtkPaned" id="paned1">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="margin_bottom">173</property>
+            <property name="margin_bottom">23</property>
             <child>
               <object class="GtkBox" id="box1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkRadioButton" id="radiobutton1">
-                    <property name="label" translatable="yes">radiobutton</property>
-                    <property name="use_action_appearance">False</property>
+                  <object class="GtkLabel" id="classification">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
-                    <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
-                    <property name="group">radiobutton2</property>
+                    <property name="can_focus">False</property>
+                    <property name="xalign">0.47999998927116394</property>
+                    <property name="label" translatable="yes">Классификация</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -102,8 +189,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="radiobutton2">
-                    <property name="label" translatable="yes">radiobutton</property>
+                  <object class="GtkRadioButton" id="back_propagation">
+                    <property name="label" translatable="yes">Back propagation</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -111,7 +198,8 @@
                     <property name="use_action_appearance">False</property>
                     <property name="xalign">0</property>
                     <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="draw_indicator">False</property>
+                    <signal name="toggled" handler="change_algorithm" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -120,16 +208,18 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="radiobutton3">
-                    <property name="label" translatable="yes">radiobutton</property>
+                  <object class="GtkRadioButton" id="resilient_propagation">
+                    <property name="label" translatable="yes">Resilient propagation</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_action_appearance">False</property>
                     <property name="xalign">0</property>
-                    <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="yalign">0.50999999046325684</property>
+                    <property name="draw_indicator">False</property>
+                    <property name="group">back_propagation</property>
+                    <signal name="toggled" handler="change_algorithm" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -138,16 +228,18 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="radiobutton4">
-                    <property name="label" translatable="yes">radiobutton</property>
+                  <object class="GtkRadioButton" id="decision_trees">
+                    <property name="label" translatable="yes">Decision trees</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_action_appearance">False</property>
                     <property name="xalign">0</property>
-                    <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="yalign">0.49000000953674316</property>
+                    <property name="draw_indicator">False</property>
+                    <property name="group">back_propagation</property>
+                    <signal name="toggled" handler="change_algorithm" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -156,8 +248,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="radiobutton5">
-                    <property name="label" translatable="yes">radiobutton</property>
+                  <object class="GtkRadioButton" id="k_means">
+                    <property name="label" translatable="yes">K-means</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -165,7 +257,9 @@
                     <property name="use_action_appearance">False</property>
                     <property name="xalign">0</property>
                     <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="draw_indicator">False</property>
+                    <property name="group">back_propagation</property>
+                    <signal name="toggled" handler="change_algorithm" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -174,8 +268,21 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="radiobutton6">
-                    <property name="label" translatable="yes">radiobutton</property>
+                  <object class="GtkLabel" id="clustering">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="xalign">0.54000002145767212</property>
+                    <property name="label" translatable="yes">Кластеризация</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="support_vector">
+                    <property name="label" translatable="yes">Support Vector</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -183,12 +290,34 @@
                     <property name="use_action_appearance">False</property>
                     <property name="xalign">0</property>
                     <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="draw_indicator">False</property>
+                    <property name="group">back_propagation</property>
+                    <signal name="toggled" handler="change_algorithm" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">5</property>
+                    <property name="position">6</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="mean_shift">
+                    <property name="label" translatable="yes">Mean-shift</property>
+                    <property name="use_action_appearance">False</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="use_action_appearance">False</property>
+                    <property name="xalign">0</property>
+                    <property name="active">True</property>
+                    <property name="draw_indicator">False</property>
+                    <property name="group">back_propagation</property>
+                    <signal name="toggled" handler="change_algorithm" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">7</property>
                   </packing>
                 </child>
               </object>
@@ -203,19 +332,26 @@
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkLabel" id="label2">
+                  <object class="GtkScrolledWindow" id="scrolledwindow1">
+                    <property name="height_request">195</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">label</property>
+                    <property name="can_focus">True</property>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <object class="GtkTextView" id="main_text_view">
+                        <property name="height_request">190</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="margin_bottom">3</property>
+                        <property name="editable">False</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
-                </child>
-                <child>
-                  <placeholder/>
                 </child>
               </object>
               <packing>
