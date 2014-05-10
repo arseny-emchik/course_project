@@ -3,6 +3,8 @@
 #           IMPORTS
 # =======================================================
 from pybrain.supervised.trainers import BackpropTrainer
+from pybrain.structure import LinearLayer, SigmoidLayer, GaussianLayer, LSTMLayer
+from pybrain.structure import MDLSTMLayer, SoftmaxLayer, StateDependentLayer, TanhLayer
 import _interface
 
 # =======================================================
@@ -15,7 +17,7 @@ class Backprop(_interface.InterfaceML):
               hidden_layers=3,
               num_outputs=1,
               num_inputs=-1,
-              hiddenclass=None):
+              hiddenclass="TanhLayer"):
         num_inputs = self._count_inputs() if num_inputs == -1 else num_inputs
         if num_inputs <= 0 or num_outputs <= 0 or cycles <= 0 or (percent > 100 or percent <= 0):
             return
