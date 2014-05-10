@@ -93,7 +93,7 @@ class WinBackPr:
 
     def __setCombobox(self):
         liststore = Gtk.ListStore(int, str)
-        liststore.append([0, 'Фугкция активации'])
+        liststore.append([0, 'Функция активации'])
         for index, data_set in enumerate(FuncArr):
             liststore.append([index, data_set])
 
@@ -150,7 +150,12 @@ class WinBackPr:
         text += 'Params:\n'
         text += 'Algorithms: Back propagation\n'
         text += 'Data set path: ' + self.__file_path + "\n"
-        text += 'Data set is binary: ' + ('true' if back_propagation.is_binary() else 'false')
+        text += 'Data set is binary: ' + ('true' if back_propagation.is_binary() else 'false') + "\n"
+        text += 'Func name: ' + self.__func_name
+
+        # text += 'Num neurons: ' + self.__num_neurons + "\n"
+        # text += 'Num cycle: ' + self.__num_cycle + "\n"
+        # text += 'Percent train: ' + self.__percent_train
         #text +=
 
         self.showText(self.__root_builder, text)

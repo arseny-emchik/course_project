@@ -19,11 +19,11 @@ import control
 # data_set = back_propagation.get_data_set(100)
 # control.draw_roc(network.activate, data_set)
 
-# #test 2
-# decision_tree.load_CSV('../data_sets/new_iris_dataset.csv')
-# clf = decision_tree.train(90, max_features="log2")
-# data_set = decision_tree.get_data_set(100)
-# control.draw_confusion_matrix(clf.predict, data_set)
+#test 2
+decision_tree.load_CSV('../data_sets/new_iris_dataset.csv')
+clf = decision_tree.train(90, max_features="log2")
+data_set = decision_tree.get_data_set(100)
+control.draw_confusion_matrix(clf.predict, data_set)
 #
 # # test 3
 # resilient_propagation.load_CSV('../data_sets/new_iris_dataset.csv')
@@ -73,7 +73,7 @@ import control
 # print data_set['input'].shape
 # print len(np.unique(data_set['target']))
 
-kmeans.load_CSV('../data_sets/new_iris_dataset.csv')
-km = kmeans.train("k-means++", 40)
-kmeans.printResult(km)
-kmeans.showPlot(km)
+# kmeans.load_CSV('../data_sets/new_iris_dataset.csv')
+# km = kmeans.train("k-means++", 40)
+# kmeans.printResult(km)
+# kmeans.showPlot(km)

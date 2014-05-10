@@ -36,7 +36,7 @@ class WinResP:
 
     def __setCombobox(self):
         liststore = Gtk.ListStore(int, str)
-        liststore.append([0, 'Фугкция активации'])
+        liststore.append([0, 'Функция активации'])
         for index, data_set in enumerate(FuncArr):
             liststore.append([index, data_set])
 
@@ -91,10 +91,10 @@ class WinResP:
 
         text = 'New win has created!\n'
         text += 'Params:\n'
-        text += 'Algorithms: Resilient Propagation\n'
+        text += 'Algorithms: Back propagation\n'
         text += 'Data set path: ' + self.__file_path + "\n"
-        text += 'Data set is binary: ' + ('true' if resilient_propagation.is_binary() else 'false')
-        #text +=
+        text += 'Data set is binary: ' + ('true' if resilient_propagation.is_binary() else 'false') + "\n"
+        text += 'Func name: ' + self.__func_name
 
         self.showText(self.__root_builder, text)
 
