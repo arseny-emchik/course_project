@@ -4,8 +4,20 @@
 # =======================================================
 from gi.repository import Gtk
 
+import sys
+from os import listdir
+from os.path import isfile, join
 
-DataSetArr = ['first', 'second']
+# import files
+from algorithms import back_propagation
+from algorithms import DBScan
+from algorithms import decision_tree
+from algorithms import mshift
+from algorithms import resilient_propagation
+from algorithms import support_vector
+from algorithms import control
+
+DataSetArr = [f for f in listdir('../data_sets') if isfile(join('../data_sets', f))]
 
 # =======================================================
 #                  GUI
@@ -60,6 +72,7 @@ class Handler:
 
     def onDeleteWindow(self, *args):
         Gtk.main_quit(*args)
+        sys.exit(0)
 
     def change_algorithm(self,  widget):
         if widget.get_active():
@@ -85,24 +98,26 @@ class Handler:
         elif self.__currentKindDataSet == 'data_set_file':
             file_path = self.__file_path
         else:
+            self.showText('Error data set')
             return
 
         self.__createNewWindow(file_path)
 
     def __createNewWindow(self, file_path):
         if self.__currentKindAlgorithm == 'back_propagation':
-            main = WinBackPr(file_path)
+            main = WinBackPr(self.__builder, file_path)
         elif self.__currentKindAlgorithm == 'resilient_propagation':
-            main = WinBackPr(file_path)
+            main = WinBackPr(self.__builder, file_path)
         elif self.__currentKindAlgorithm == 'decision_trees':
-            main = WinBackPr(file_path)
+            main = WinBackPr(self.__builder, file_path)
         elif self.__currentKindAlgorithm == 'k_means':
-            main = WinBackPr(file_path)
+            main = WinBackPr(self.__builder, file_path)
         elif self.__currentKindAlgorithm == 'support_vector':
-            main = WinBackPr(file_path)
+            main = WinBackPr(self.__builder, file_path)
         elif self.__currentKindAlgorithm == 'mean_shift':
-            main = WinBackPr(file_path)
+            main = WinBackPr(self.__builder, file_path)
         else:
+            self.showText('Error create new win')
             return
 
         Gtk.main()
@@ -110,23 +125,59 @@ class Handler:
 class WinBackPr:
 
     __builder = None
+    __root_builder = None
+    __window = None
+
     __currentKindDataSet = None
     __file_path = None
 
-    def __init__(self, file_path):
+    __percent_train = 0
+
+    def __init__(self, root_builder, file_path):
+        self.__root_builder = root_builder
         self.__file_path = file_path
         self.__builder = Gtk.Builder()
         self.__builder.add_from_file("win1.glade")
         self.__builder.connect_signals(self)
 
-        window = self.__builder.get_object("dialog1")
-        window.show_all()
+        self.__window = self.__builder.get_object("dialog1")
+        self.__window.show_all()
 
-        self.showText('file path is ' + file_path)
+        text = 'New win has created!\n'
+        text += 'Params:\n'
+        text += 'Algorithms: Back propagation\n'
+        text += 'Data set path: ' + file_path
 
-    def showText(self, line):
-        entryForText = self.__builder.get_object('main_text_view')
-        entryForText.get_buffer().insert(entryForText.get_buffer().get_end_iter(), line + '\n=============\n')
+        self.showText(self.__root_builder, text)
+        self.showText(self.__builder, 'file path is ' + file_path)
+
+    def __clearTextView(self, builder):
+        entryForText = builder.get_object('main_text_view')
+        entryForText.get_buffer().set_text('')
+
+    def showText(self, builder, line):
+        self.__clearTextView(builder)
+        entryForText = builder.get_object('main_text_view')
+
+        line += '\n=====================================\n'
+        entryForText.get_buffer().insert(entryForText.get_buffer().get_end_iter(), line)
+
+    def onChangePercent(self, spin):
+        self.__percent_train = spin.get_value_as_int()
+
+    def onSomeValue(self, entry):
+        a = entry.get_chars(0, -1)
+        print a
+
+    def onCheck1(self, widget):
+        if widget.get_active():
+            print 'true'
+        else:
+            print 'false'
+
+    def onExit(self, *args):
+        self.__window.destroy()
+
 
 
 main = Handler()
