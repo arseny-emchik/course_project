@@ -3,8 +3,7 @@
 #           IMPORTS
 # =======================================================
 from pybrain.supervised.trainers import BackpropTrainer
-from pybrain.structure import LinearLayer, SigmoidLayer, GaussianLayer, LSTMLayer
-from pybrain.structure import MDLSTMLayer, SoftmaxLayer, StateDependentLayer, TanhLayer
+
 import _interface
 
 # =======================================================
