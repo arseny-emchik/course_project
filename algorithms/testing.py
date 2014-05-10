@@ -9,6 +9,7 @@ import decision_tree
 import mshift
 import resilient_propagation
 import support_vector
+import kmeans
 import control
 
 
@@ -50,3 +51,29 @@ import control
 # DBScan.showPlot2D()
 # DBScan.showPlot3D()
 # DBScan.printResult()
+
+
+
+# back_propagation.load_CSV('../data_sets/binary_iris_dataset.csv')
+# data_set = back_propagation.get_data_set(100)
+#
+# digits = data_set
+# data = data_set['input']
+# n_samples, n_features = data.shape
+# n_digits = len(np.unique(data_set['target']))
+# labels = data_set['target']
+#
+# from sklearn.datasets import load_digits
+# import numpy as np
+# digits = load_digits(n_class=10)
+#
+#
+# # print digits.data
+# # print data_set['input']
+# print data_set['input'].shape
+# print len(np.unique(data_set['target']))
+
+kmeans.load_CSV('../data_sets/new_iris_dataset.csv')
+km = kmeans.train("k-means++", 40)
+kmeans.printResult(km)
+kmeans.showPlot(km)
