@@ -6,6 +6,8 @@ import numpy as np
 from sklearn import svm
 
 import _interface
+
+kernels = ["rbf", "linear", "poly", "sigmoid", "precomputed"]
 # =======================================================
 #           Support Vector Machines
 # =======================================================
@@ -14,6 +16,7 @@ class SVM(_interface.InterfaceML):
               percent,
               num_outputs=1,
               num_inputs=-1,
+              kernel = "rbf",
               hiddenclass=None):
         num_inputs = self._count_inputs() if num_inputs == -1 else num_inputs
         data_set = self.get_data_set(percent, num_inputs, num_outputs)

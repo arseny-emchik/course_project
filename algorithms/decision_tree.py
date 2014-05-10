@@ -5,6 +5,9 @@
 from sklearn.tree import DecisionTreeClassifier
 import _interface
 
+tree_criterion = ["gini", "entropy"]
+max_features = ["auto", "sqrt", "log2"]
+
 # =======================================================
 #           Decision Tree
 # =======================================================
@@ -13,10 +16,12 @@ class DTree(_interface.InterfaceML):
               percent,
               num_outputs=1,
               num_inputs=-1,
-              hiddenclass=None):
+              max_features=None,
+              hiddenclass=None,
+              criterion="gini"):
         num_inputs = self._count_inputs() if num_inputs == -1 else num_inputs
         data_set = self.get_data_set(percent, num_inputs, num_outputs)
-        clf = DecisionTreeClassifier().fit(data_set['input'], data_set['target'])
+        clf = DecisionTreeClassifier(criterion=criterion, max_features=max_features).fit(data_set['input'], data_set['target'])
 
         return clf
 
