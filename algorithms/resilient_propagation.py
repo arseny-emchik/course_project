@@ -13,9 +13,9 @@ class Rprop(_interface.InterfaceML):
               cycles,
               percent,
               hidden_layers=3,
+              hiddenclass=None,
               num_outputs=1,
-              num_inputs=-1,
-              hiddenclass=None):
+              num_inputs=-1):
         num_inputs = self._count_inputs() if num_inputs == -1 else num_inputs
         if num_inputs <= 0 or num_outputs <= 0 or cycles <= 0 or (percent > 100 or percent <= 0):
             return
@@ -36,3 +36,4 @@ train = _rp.train
 load_CSV = _rp.load_CSV
 get_data_set = _rp.get_data_set
 show_CSV = _rp.show_CSV
+is_binary = _rp.is_binary

@@ -11,11 +11,11 @@ from os.path import isfile, join
 
 # import files
 import bp_GUI as Bp
+import rp_GUI as Rp
 
 from algorithms import DBScan
 from algorithms import decision_tree
 from algorithms import mshift
-from algorithms import resilient_propagation
 from algorithms import support_vector
 from algorithms import control
 
@@ -110,7 +110,7 @@ class Handler:
         if self.__currentKindAlgorithm == 'back_propagation':
             main = Bp.Class(self.__builder, file_path)
         elif self.__currentKindAlgorithm == 'resilient_propagation':
-            main = Bp.Class(self.__builder, file_path)
+            main = Rp.Class(self.__builder, file_path)
         elif self.__currentKindAlgorithm == 'decision_trees':
             main = Bp.Class(self.__builder, file_path)
         elif self.__currentKindAlgorithm == 'k_means':
