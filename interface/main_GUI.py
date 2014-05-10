@@ -5,6 +5,7 @@
 from gi.repository import Gtk
 
 import sys
+import os
 from os import listdir
 from os.path import isfile, join
 
@@ -18,7 +19,8 @@ from algorithms import resilient_propagation
 from algorithms import support_vector
 from algorithms import control
 
-DataSetArr = [f for f in listdir('../data_sets') if isfile(join('../data_sets', f))]
+DATA_SETS_PATH = os.getcwd() + '/../data_sets/'
+DataSetArr = [f for f in listdir(DATA_SETS_PATH) if isfile(join(DATA_SETS_PATH, f))]
 
 # =======================================================
 #                  GUI
@@ -95,7 +97,7 @@ class Handler:
         self.showText(self.__currentKindDataSet) # for test
 
         if self.__currentKindDataSet == 'data_set_default':
-            file_path = self.__file_name # + file path
+            file_path = DATA_SETS_PATH + self.__file_name
         elif self.__currentKindDataSet == 'data_set_file':
             file_path = self.__file_path
         else:
@@ -122,9 +124,6 @@ class Handler:
             return
 
         Gtk.main()
-
-
-
 
 
 main = Handler()

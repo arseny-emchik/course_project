@@ -73,7 +73,7 @@ class InterfaceML:
         self._data_set = self.__get_full_data_set()
 
         if len(self.__get_levels()) == 2:
-            self.binary = True
+            self.__binary = True
 
         return self._csv_file
 
@@ -119,9 +119,9 @@ class InterfaceML:
               cycles,
               percent,
               hidden_layers=3,
+              hiddenclass=None,
               num_outputs=1,
-              num_inputs=-1,
-              hiddenclass=None):
+              num_inputs=-1):
         """train net
         :param cycles:
         :param percent:

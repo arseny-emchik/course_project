@@ -14,9 +14,9 @@ class Backprop(_interface.InterfaceML):
               cycles,
               percent,
               hidden_layers=3,
+              hiddenclass=None,
               num_outputs=1,
-              num_inputs=-1,
-              hiddenclass="TanhLayer"):
+              num_inputs=-1):
         num_inputs = self._count_inputs() if num_inputs == -1 else num_inputs
         if num_inputs <= 0 or num_outputs <= 0 or cycles <= 0 or (percent > 100 or percent <= 0):
             return
@@ -36,3 +36,4 @@ train = _b.train
 load_CSV = _b.load_CSV
 get_data_set = _b.get_data_set
 show_CSV = _b.show_CSV
+is_binary = _b.is_binary
