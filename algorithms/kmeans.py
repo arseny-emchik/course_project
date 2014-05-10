@@ -13,6 +13,8 @@ from sklearn.preprocessing import scale
 # import files
 import _interface
 
+kmeans_init = ["k-means++", "random"]
+
 # =======================================================
 #           K-Means clustering algorithm
 # =======================================================
