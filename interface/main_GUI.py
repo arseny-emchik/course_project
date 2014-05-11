@@ -13,6 +13,7 @@ from os.path import isfile, join
 import bp_GUI as Bp
 import rp_GUI as Rp
 import dt_GUI as Dt
+import km_GUI as Km
 
 from algorithms import DBScan
 from algorithms import mshift
@@ -114,7 +115,7 @@ class Handler:
         elif self.__currentKindAlgorithm == 'decision_trees':
             main = Dt.Class(self.__builder, file_path)
         elif self.__currentKindAlgorithm == 'k_means':
-            main = Bp.Class(self.__builder, file_path)
+            main = Km.Class(self.__builder, file_path)
         elif self.__currentKindAlgorithm == 'support_vector':
             main = Bp.Class(self.__builder, file_path)
         elif self.__currentKindAlgorithm == 'mean_shift':

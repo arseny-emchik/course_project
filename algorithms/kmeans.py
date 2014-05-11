@@ -9,11 +9,9 @@ from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import scale
 
-
 # import files
 import _interface
 
-kmeans_init = ["k-means++", "random"]
 
 # =======================================================
 #           K-Means clustering algorithm
