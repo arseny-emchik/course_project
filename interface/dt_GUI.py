@@ -6,10 +6,12 @@ from gi.repository import Gtk
 from algorithms import decision_tree
 from algorithms import control
 
+import _base_GUI
+
 tree_criterion = ["gini", "entropy"]
 max_features = ["auto", "sqrt", "log2"]
 
-class WinDecTree:
+class WinDecTree(_base_GUI.BaseGUI):
 
     __builder = None
     __root_builder = None
@@ -77,17 +79,6 @@ class WinDecTree:
             return
         self.__max_features = max_features[index - 1]
 
-    def __clearTextView(self, builder):
-        entryForText = builder.get_object('main_text_view')
-        entryForText.get_buffer().set_text('')
-
-    def showText(self, builder, line):
-        self.__clearTextView(builder)
-        entryForText = builder.get_object('main_text_view')
-
-        line += '\n=====================================\n'
-        entryForText.get_buffer().insert(entryForText.get_buffer().get_end_iter(), line)
-
     def onChangePercent(self, spin):
         self.__percent_train = spin.get_value_as_int()
 
@@ -110,7 +101,7 @@ class WinDecTree:
         text += 'Max features: ' + self.__max_features
         #text +=
 
-        self.showText(self.__root_builder, text)
+        self._showText(self.__root_builder, text)
 
         if decision_tree.is_binary():
             control.draw_roc(clf.predict, data_set)

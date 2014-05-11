@@ -138,6 +138,9 @@
                 <property name="invisible_char">•</property>
                 <property name="adjustment">Samples</property>
                 <property name="digits">1</property>
+                <property name="snap_to_ticks">True</property>
+                <property name="numeric">True</property>
+                <property name="wrap">True</property>
                 <signal name="changed" handler="onChangeSample" swapped="no"/>
               </object>
               <packing>

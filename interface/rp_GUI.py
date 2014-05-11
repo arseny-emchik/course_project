@@ -6,11 +6,13 @@ from gi.repository import Gtk
 from algorithms import resilient_propagation
 from algorithms import control
 
+import _base_GUI
+
 from pybrain.structure import LinearLayer, SigmoidLayer, GaussianLayer, LSTMLayer
 from pybrain.structure import MDLSTMLayer, SoftmaxLayer, StateDependentLayer, TanhLayer
 FuncArr = ['LinearLayer', 'SigmoidLayer', 'GaussianLayer', 'LSTMLayer', 'MDLSTMLayer', 'SoftmaxLayer', 'StateDependentLayer', 'TanhLayer']
 
-class WinResP:
+class WinResP(_base_GUI.BaseGUI):
 
     __builder = None
     __root_builder = None
@@ -56,17 +58,6 @@ class WinResP:
             return
         self.__func_name = FuncArr[index - 1]
 
-    def __clearTextView(self, builder):
-        entryForText = builder.get_object('main_text_view')
-        entryForText.get_buffer().set_text('')
-
-    def showText(self, builder, line):
-        self.__clearTextView(builder)
-        entryForText = builder.get_object('main_text_view')
-
-        line += '\n=====================================\n'
-        entryForText.get_buffer().insert(entryForText.get_buffer().get_end_iter(), line)
-
     def onChangePercent(self, spin):
         self.__percent_train = spin.get_value_as_int()
 
@@ -96,7 +87,7 @@ class WinResP:
         text += 'Data set is binary: ' + ('true' if resilient_propagation.is_binary() else 'false') + "\n"
         text += 'Func name: ' + self.__func_name
 
-        self.showText(self.__root_builder, text)
+        self._showText(self.__root_builder, text)
 
         if resilient_propagation.is_binary():
             control.draw_roc(network.activate, data_set)

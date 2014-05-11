@@ -5,9 +5,11 @@
 from gi.repository import Gtk
 from algorithms import kmeans
 
+import _base_GUI
+
 kmeans_init = ["k-means++", "random"]
 
-class WinKMeans:
+class WinKMeans(_base_GUI.BaseGUI):
 
     __builder = None
     __root_builder = None
@@ -50,17 +52,6 @@ class WinKMeans:
         if index <= 0:
             return
         self.__kmeans_init = kmeans_init[index - 1]
-
-    def __clearTextView(self, builder):
-        entryForText = builder.get_object('main_text_view')
-        entryForText.get_buffer().set_text('')
-
-    def showText(self, builder, line):
-        self.__clearTextView(builder)
-        entryForText = builder.get_object('main_text_view')
-
-        line += '\n=====================================\n'
-        entryForText.get_buffer().insert(entryForText.get_buffer().get_end_iter(), line)
 
     def onChangeNInit(self, spin):
         self.__n_init = spin.get_value_as_int()

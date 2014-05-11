@@ -6,6 +6,8 @@ from gi.repository import Gtk
 from algorithms import back_propagation
 from algorithms import control
 
+import _base_GUI
+
 from pybrain.structure import LinearLayer, SigmoidLayer, GaussianLayer, LSTMLayer
 from pybrain.structure import MDLSTMLayer, SoftmaxLayer, StateDependentLayer, TanhLayer
 FuncArr = ['LinearLayer', 'SigmoidLayer', 'GaussianLayer', 'LSTMLayer', 'MDLSTMLayer', 'SoftmaxLayer', 'StateDependentLayer', 'TanhLayer']
@@ -67,7 +69,7 @@ FuncArr = ['LinearLayer', 'SigmoidLayer', 'GaussianLayer', 'LSTMLayer', 'MDLSTML
 #         self.__window.destroy()
 
 
-class WinBackPr:
+class WinBackPr(_base_GUI.BaseGUI):
 
     __builder = None
     __root_builder = None
@@ -113,17 +115,6 @@ class WinBackPr:
             return
         self.__func_name = FuncArr[index - 1]
 
-    def __clearTextView(self, builder):
-        entryForText = builder.get_object('main_text_view')
-        entryForText.get_buffer().set_text('')
-
-    def showText(self, builder, line):
-        self.__clearTextView(builder)
-        entryForText = builder.get_object('main_text_view')
-
-        line += '\n=====================================\n'
-        entryForText.get_buffer().insert(entryForText.get_buffer().get_end_iter(), line)
-
     def onChangePercent(self, spin):
         self.__percent_train = spin.get_value_as_int()
 
@@ -158,7 +149,7 @@ class WinBackPr:
         # text += 'Percent train: ' + self.__percent_train
         #text +=
 
-        self.showText(self.__root_builder, text)
+        self._showText(self.__root_builder, text)
 
 
         if back_propagation.is_binary():

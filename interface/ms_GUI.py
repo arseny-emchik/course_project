@@ -4,10 +4,11 @@
 # =======================================================
 from gi.repository import Gtk
 from algorithms import mshift
-from algorithms import control
+
+import _base_GUI
 
 
-class WinMSift:
+class WinMSift(_base_GUI.BaseGUI):
 
     __builder = None
     __root_builder = None
@@ -26,17 +27,6 @@ class WinMSift:
 
         self.__window = self.__builder.get_object("mshift")
         self.__window.show_all()
-
-    def __clearTextView(self, builder):
-        entryForText = builder.get_object('main_text_view')
-        entryForText.get_buffer().set_text('')
-
-    def showText(self, builder, line):
-        self.__clearTextView(builder)
-        entryForText = builder.get_object('main_text_view')
-
-        line += '\n=====================================\n'
-        entryForText.get_buffer().insert(entryForText.get_buffer().get_end_iter(), line)
 
     def onChangeQuantile(self, spin):
         self.__quantile = float(spin.get_value())

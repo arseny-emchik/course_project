@@ -6,9 +6,11 @@ from gi.repository import Gtk
 from algorithms import support_vector
 from algorithms import control
 
+import _base_GUI
+
 kernels = ["rbf", "linear", "poly", "sigmoid", "precomputed"]
 
-class WinSepVector:
+class WinSepVector(_base_GUI.BaseGUI):
 
     __builder = None
     __root_builder = None
@@ -52,17 +54,6 @@ class WinSepVector:
             return
         self.__kernel = kernels[index - 1]
         #print self.__kernel
-
-    def __clearTextView(self, builder):
-        entryForText = builder.get_object('main_text_view')
-        entryForText.get_buffer().set_text('')
-
-    def showText(self, builder, line):
-        self.__clearTextView(builder)
-        entryForText = builder.get_object('main_text_view')
-
-        line += '\n=====================================\n'
-        entryForText.get_buffer().insert(entryForText.get_buffer().get_end_iter(), line)
 
     def onChangePercents(self, spin):
         self.__percents = spin.get_value_as_int()
