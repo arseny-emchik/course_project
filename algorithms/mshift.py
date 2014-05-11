@@ -30,12 +30,12 @@ class MSC(_interface.InterfaceML):
         self.__labels_true = np.ravel(self._data_set['target'])
 
     # have to change the name of func train
-    def train(self):
+    def train(self, m_quantile=0.15, m_cluster_all=True):
         self.__set_data()
-        bandwidth = estimate_bandwidth(self.__data, quantile=0.15) #, n_samples=500
+        bandwidth = estimate_bandwidth(self.__data, quantile=m_quantile) #, n_samples=500
 
 
-        ms = MeanShift(bandwidth=bandwidth, bin_seeding=True)
+        ms = MeanShift(bandwidth=bandwidth, bin_seeding=True, cluster_all=m_cluster_all)
         ms.fit(self.__data)
         self.__labels = ms.labels_
         self.__cluster_centers = ms.cluster_centers_
