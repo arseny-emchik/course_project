@@ -34,10 +34,10 @@ class DBScanC(_interface.InterfaceML):
 
         self.__labels_true = np.ravel(self._data_set['target'])
 
-    def train(self):
+    def train(self, m_eps=0.4, m_min_sales=10):
         self.__set_data()
 
-        db = DBSCAN(eps=0.4, min_samples=10).fit(self.__data)
+        db = DBSCAN(eps=m_eps, min_samples=m_min_sales).fit(self.__data)
         self.__core_samples = db.core_sample_indices_
         self.__labels = db.labels_
 

@@ -16,11 +16,7 @@ import dt_GUI as Dt
 import km_GUI as Km
 import sp_GUI as Sp
 import ms_GUI as Ms
-
-from algorithms import DBScan
-from algorithms import mshift
-from algorithms import support_vector
-from algorithms import control
+import dbs_GUI as Dbs
 
 DATA_SETS_PATH = os.getcwd() + '/../data_sets/'
 DataSetArr = [f for f in listdir(DATA_SETS_PATH) if isfile(join(DATA_SETS_PATH, f))]
@@ -121,7 +117,7 @@ class Handler:
         elif self.__currentKindAlgorithm == 'support_vector':
             main = Sp.Class(self.__builder, file_path)
         elif self.__currentKindAlgorithm == 'mean_shift':
-            main = Ms.Class(self.__builder, file_path)
+            main = Dbs.Class(self.__builder, file_path)
         else:
             self.showText('Error create new win')
             return
