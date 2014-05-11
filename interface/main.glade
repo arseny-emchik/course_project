@@ -281,8 +281,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="k_means">
-                    <property name="label" translatable="yes">K-means</property>
+                  <object class="GtkRadioButton" id="support_vector">
+                    <property name="label" translatable="yes">SVM</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -314,8 +314,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="k_mean">
-                    <property name="label" translatable="yes">Support Vector</property>
+                  <object class="GtkRadioButton" id="k_means">
+                    <property name="label" translatable="yes">K-means</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
