@@ -30,3 +30,4 @@ train = _s.train
 load_CSV = _s.load_CSV
 get_data_set = _s.get_data_set
 show_CSV = _s.show_CSV
+is_binary = _s.is_binary

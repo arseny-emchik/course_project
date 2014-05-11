@@ -14,6 +14,7 @@ import bp_GUI as Bp
 import rp_GUI as Rp
 import dt_GUI as Dt
 import km_GUI as Km
+import sp_GUI as Sp
 
 from algorithms import DBScan
 from algorithms import mshift
@@ -117,7 +118,7 @@ class Handler:
         elif self.__currentKindAlgorithm == 'k_means':
             main = Km.Class(self.__builder, file_path)
         elif self.__currentKindAlgorithm == 'support_vector':
-            main = Bp.Class(self.__builder, file_path)
+            main = Sp.Class(self.__builder, file_path)
         elif self.__currentKindAlgorithm == 'mean_shift':
             main = Bp.Class(self.__builder, file_path)
         else:
