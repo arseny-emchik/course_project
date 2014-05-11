@@ -46,7 +46,7 @@ class Handler:
 
     def __setCombobox(self):
         liststore = Gtk.ListStore(int, str)
-        liststore.append([0, 'Выберите Data Set'])
+        liststore.append([0, 'Не выбрано'])
         for index, data_set in enumerate(DataSetArr):
             liststore.append([index, data_set])
 
@@ -109,6 +109,8 @@ class Handler:
         elif self.__currentKindAlgorithm == 'support_vector':
             main = Sp.Class(self.__builder, file_path)
         elif self.__currentKindAlgorithm == 'mean_shift':
+            main = Ms.Class(self.__builder, file_path)
+        elif self.__currentKindAlgorithm == 'DBScan':
             main = Dbs.Class(self.__builder, file_path)
         else:
             self.showText('Error create new win')

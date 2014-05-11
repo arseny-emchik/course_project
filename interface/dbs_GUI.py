@@ -30,11 +30,11 @@ class WinDBS(_base_GUI.BaseGUI):
 
     def onChangeSample(self, spin):
         self.__min_samples = float(spin.get_value())
-        print self.__min_samples
+        #print self.__min_samples
 
     def onChangeEps(self, spin):
         self.__eps = float(spin.get_value())
-        print self.__eps
+        #print self.__eps
 
     def onExit(self, *args):
         self.__window.destroy()

@@ -80,7 +80,7 @@ class WinBackPr(_base_GUI.BaseGUI):
         network = back_propagation.train(self.__percent_train, self.__num_cycle, self.__num_neurons, self.__func_name)
         data_set = back_propagation.get_data_set(100)
 
-        text = 'New win has created!\n'
+        text = 'New win has been created!\n'
         text += 'Params:\n'
         text += 'Algorithms: Back propagation\n'
         text += 'Data set path: ' + self.__file_path + "\n"
@@ -93,7 +93,6 @@ class WinBackPr(_base_GUI.BaseGUI):
         #text +=
 
         self._showText(self.__root_builder, text)
-
 
         if back_propagation.is_binary():
             control.draw_roc(network.activate, data_set)
