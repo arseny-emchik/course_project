@@ -66,11 +66,8 @@ class Handler:
             return
         self.__file_name = DataSetArr[index - 1]
 
-        self.showText("ComboBox Active Text is " + self.__file_name) # for test
-
     def onFileSet(self, widget):
         self.__file_path = widget.get_file().get_path()
-        self.showText("File path is " + self.__file_path) # for test
 
     def onDeleteWindow(self, *args):
         Gtk.main_quit(*args)
@@ -79,12 +76,10 @@ class Handler:
     def change_algorithm(self,  widget):
         if widget.get_active():
             self.__currentKindAlgorithm = Gtk.Buildable.get_name(widget)
-            self.showText(self.__currentKindAlgorithm) # for test
 
     def change_kind_data(self, widget):
         if widget.get_active():
             self.__currentKindDataSet = Gtk.Buildable.get_name(widget)
-            self.showText(self.__currentKindDataSet) # for test
 
     def showText(self, line):
         entryForText = self.__builder.get_object('main_text_view')
@@ -92,9 +87,6 @@ class Handler:
         entryForText.get_buffer().insert(entryForText.get_buffer().get_end_iter(), line + '\n=============\n')
 
     def onExecute(self, *args):
-        self.showText('!') # for test
-        self.showText(self.__currentKindDataSet) # for test
-
         if self.__currentKindDataSet == 'data_set_default':
             file_path = DATA_SETS_PATH + self.__file_name
         elif self.__currentKindDataSet == 'data_set_file':
