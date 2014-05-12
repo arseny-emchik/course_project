@@ -43,7 +43,9 @@ class Kmeans(_interface.InterfaceML):
         t0 = time()
         data = self.__data
         estimator.fit(data)
-        text = ('%.2fs    %i   %.3f   %.3f   %.3f   %.3f   %.3f   %.3f'
+        text = ('Time: %.2fs\n Inertia: %i\n Homogeneity: %.3f\n Completness: %.3f\n '
+                'V-measure: %.3f\n Adjusted Rand Index: %.3f\n Adjusted Mutual Information: %.3f\n '
+                'Silhouette Coefficient: %.3f\n'
               % ((time() - t0), estimator.inertia_,
                  metrics.homogeneity_score(self.__labels, estimator.labels_),
                  metrics.completeness_score(self.__labels, estimator.labels_),
