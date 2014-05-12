@@ -74,26 +74,25 @@ class WinBackPr(_base_GUI.BaseGUI):
         self.__num_neurons = spin.get_value_as_int()
 
     def onExecute(self, *args):
-        self.__window.destroy() ## ?!!! --
-
         back_propagation.load_CSV(self.__file_path)
         network = back_propagation.train(self.__percent_train, self.__num_cycle, self.__num_neurons, self.__func_name)
         data_set = back_propagation.get_data_set(100)
-
-        text = self._getTextTitle('back_propagation', self.__file_path)
-        text += 'Data set is binary: ' + ('true' if back_propagation.is_binary() else 'false') + "\n"
-        text += 'Func name: ' + self.__func_name
-
-        # text += 'Num neurons: ' + self.__num_neurons + "\n"
-        # text += 'Num cycle: ' + self.__num_cycle + "\n"
-        # text += 'Percent train: ' + self.__percent_train
-        #text +=
-
-        self._showText(self.__root_builder, text)
 
         if back_propagation.is_binary():
             control.draw_roc(network.activate, data_set)
 
         control.draw_confusion_matrix(network.activate, data_set)
+
+        text = self._getTextTitle('back_propagation', self.__file_path)
+        text += 'Data set is binary: ' + ('true' if back_propagation.is_binary() else 'false') + "\n"
+        text += 'Func name: ' + self.__func_name + "\n"
+        text += 'Num neurons: %i\n' % self.__num_neurons
+        text += 'Num cycle: %i\n' % self.__num_cycle
+        text += 'Percent train: %i\n ' % self.__percent_train
+        text += back_propagation.getResult(network, data_set)
+
+
+        self._showText(self.__root_builder, text)
+        self.__window.destroy()
 
 Class = WinBackPr

@@ -28,7 +28,7 @@ class Control:
         return y_true, y_predict
 
     def draw_confusion_matrix(self, function, data_set):
-        y_true, y_predict = self.__calculate_entire_ds(function, data_set)
+        y_true, y_predict = self.calculate_entire_ds(function, data_set)
         cm = confusion_matrix(y_true, y_predict)
         pl.matshow(cm)
         pl.title('Confusion matrix')
@@ -38,7 +38,7 @@ class Control:
         pl.show()
 
     def draw_roc(self, function, data_set):
-        y_true, y_predict = self.__calculate_entire_ds(function, data_set)
+        y_true, y_predict = self.calculate_entire_ds(function, data_set)
         # print y_true
         # print y_predict
         fpr, tpr, thresholds = roc_curve(y_true, y_predict)
