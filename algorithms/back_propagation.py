@@ -3,10 +3,10 @@
 #           IMPORTS
 # =======================================================
 from pybrain.supervised.trainers import BackpropTrainer
-from sklearn.metrics import classification_report
 
 import _interface
 import control
+import sklearn.metrics as metrics
 
 # =======================================================
 #           Back propagation
@@ -34,7 +34,20 @@ class Backprop(_interface.InterfaceML):
 
     def getResult(self, network, data_set):
         y_true, y_predict = control.calculate_entire_ds(network.activate, data_set)
-        return classification_report(y_true, y_predict)
+        result = metrics.classification_report(y_true, y_predict)
+        result += "\n Accuracy: %f\n" % metrics.accuracy_score(y_true, y_predict)
+        result += "Average precision: %f\n" % metrics.average_precision_score(y_true, y_predict)
+        result += "F1 score: %f\n" % metrics.f1_score(y_true, y_predict)
+        result += "Fbeta score: %f\n" % metrics.fbeta_score(y_true, y_predict)
+        result += "Hamming loss: %f\n" % metrics.hamming_loss(y_true, y_predict)
+        result += "Hinge loss: %f\n" % metrics.hinge_loss(y_true, y_predict)
+        result += "Jaccard similarity: %f\n" % metrics.jaccard_similarity_score(y_true, y_predict)
+        result += "Logistic loss: %f\n" % metrics.log_loss(y_true, y_predict)
+        result += "Matthews correlation coefficient: %f\n" % metrics.matthews_corrcoef(y_true, y_predict)
+        result += "Precision: %f\n" % metrics.precision_score(y_true, y_predict)
+        result += "Recall: %f\n" % metrics.recall_score(y_true, y_predict)
+        result += "Area Under the Curve: %f\n" % metrics.roc_auc_score(y_true, y_predict)
+        return result
 
 _b = Backprop()
 train = _b.train
