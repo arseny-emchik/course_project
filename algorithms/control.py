@@ -11,8 +11,8 @@ from sklearn.metrics import confusion_matrix, roc_curve, auc
 #           CONTROL
 # =======================================================
 class Control:
-    # private class methods
-    def __calculate_entire_ds(self, function, data_set):
+    # public methods
+    def calculate_entire_ds(self, function, data_set):
         y_true = []
         y_predict = []
 
@@ -27,7 +27,6 @@ class Control:
         # print y_predict
         return y_true, y_predict
 
-    # public methods
     def draw_confusion_matrix(self, function, data_set):
         y_true, y_predict = self.__calculate_entire_ds(function, data_set)
         cm = confusion_matrix(y_true, y_predict)
@@ -61,4 +60,4 @@ class Control:
 _control = Control()
 draw_confusion_matrix = _control.draw_confusion_matrix
 draw_roc = _control.draw_roc
-
+calculate_entire_ds = _control.calculate_entire_ds

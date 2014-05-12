@@ -3,8 +3,10 @@
 #           IMPORTS
 # =======================================================
 from pybrain.supervised.trainers import BackpropTrainer
+from sklearn.metrics import classification_report
 
 import _interface
+import control
 
 # =======================================================
 #           Back propagation
@@ -30,8 +32,13 @@ class Backprop(_interface.InterfaceML):
 
         return network
 
+    def getResult(self, network, data_set):
+        y_true, y_predict = control.calculate_entire_ds(network.activate, data_set)
+        return classification_report(y_true, y_predict)
+
 _b = Backprop()
 train = _b.train
+getResult = _b.getResult
 
 load_CSV = _b.load_CSV
 get_data_set = _b.get_data_set
