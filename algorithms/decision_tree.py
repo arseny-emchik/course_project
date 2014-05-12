@@ -24,6 +24,7 @@ class DTree(_interface.InterfaceML):
 
 _d = DTree()
 train = _d.train
+getResult = _d.getResult
 
 load_CSV = _d.load_CSV
 get_data_set = _d.get_data_set

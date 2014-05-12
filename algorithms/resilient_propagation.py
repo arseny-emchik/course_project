@@ -32,6 +32,7 @@ class Rprop(_interface.InterfaceML):
 
 _rp = Rprop()
 train = _rp.train
+getResult = _rp.getResult
 
 load_CSV = _rp.load_CSV
 get_data_set = _rp.get_data_set

@@ -26,6 +26,7 @@ class SVM(_interface.InterfaceML):
 
 _s = SVM()
 train = _s.train
+getResult = _s.getResult
 
 load_CSV = _s.load_CSV
 get_data_set = _s.get_data_set
