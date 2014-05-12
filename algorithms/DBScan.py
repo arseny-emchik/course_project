@@ -43,19 +43,30 @@ class DBScanC(_interface.InterfaceML):
 
         self.__n_clusters = len(set(self.__labels)) - (1 if -1 in self.__labels else 0)
 
-    def printResult(self):
-        print('Estimated number of clusters: %d' % self.__n_clusters)
-        print("Homogeneity: %0.3f" % metrics.homogeneity_score(self.__labels_true, self.__labels))
-        print("Completeness: %0.3f" % metrics.completeness_score(self.__labels_true, self.__labels))
-        print("V-measure: %0.3f" % metrics.v_measure_score(self.__labels_true, self.__labels))
-        print("Adjusted Rand Index: %0.3f"
+    def getResult(self):
+        text = ('Estimated number of clusters: %d\n' % self.__n_clusters)
+        text += ("Homogeneity: %0.3f\n" % metrics.homogeneity_score(self.__labels_true, self.__labels))
+        text += ("Completeness: %0.3f\n" % metrics.completeness_score(self.__labels_true, self.__labels))
+        text += ("V-measure: %0.3f\n" % metrics.v_measure_score(self.__labels_true, self.__labels))
+        text += ("Adjusted Rand Index: %0.3f\n"
               % metrics.adjusted_rand_score(self.__labels_true, self.__labels))
-        print("Adjusted Mutual Information: %0.3f"
+        text += ("Adjusted Mutual Information: %0.3f\n"
               % metrics.adjusted_mutual_info_score(self.__labels_true, self.__labels))
-        print("Silhouette Coefficient: %0.3f"
+        text += ("Silhouette Coefficient: %0.3f"
               % metrics.silhouette_score(self.__data, self.__labels))
 
+        return text
 
+        # print('Estimated number of clusters: %d' % self.__n_clusters)
+        # print("Homogeneity: %0.3f" % metrics.homogeneity_score(self.__labels_true, self.__labels))
+        # print("Completeness: %0.3f" % metrics.completeness_score(self.__labels_true, self.__labels))
+        # print("V-measure: %0.3f" % metrics.v_measure_score(self.__labels_true, self.__labels))
+        # print("Adjusted Rand Index: %0.3f"
+        #       % metrics.adjusted_rand_score(self.__labels_true, self.__labels))
+        # print("Adjusted Mutual Information: %0.3f"
+        #       % metrics.adjusted_mutual_info_score(self.__labels_true, self.__labels))
+        # print("Silhouette Coefficient: %0.3f"
+        #       % metrics.silhouette_score(self.__data, self.__labels))
 
         # labels_true = np.ravel(data_set['target'].astype(np.int))
         # labels_predict = ms.labels_.astype(np.int)
@@ -100,7 +111,7 @@ class DBScanC(_interface.InterfaceML):
 
 _d = DBScanC()
 train = _d.train
-printResult = _d.printResult
+getResult = _d.getResult
 showPlot2D = _d.showPlot2D
 showPlot3D = _d.showPlot3D
 

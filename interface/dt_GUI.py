@@ -92,14 +92,10 @@ class WinDecTree(_base_GUI.BaseGUI):
         clf = decision_tree.train(self.__percent_train, criterion=self.__tree_criterion, max_features=self.__max_features)
         data_set = decision_tree.get_data_set(100)
 
-        text = 'New win has created!\n'
-        text += 'Params:\n'
-        text += 'Algorithms: Decision Tree\n'
-        text += 'Data set path: ' + self.__file_path + "\n"
+        text = self._getTextTitle('Decision Tree', self.__file_path)
         text += 'Data set is binary: ' + ('true' if decision_tree.is_binary() else 'false') + "\n"
         text += 'Tree criterion: ' + self.__tree_criterion + "\n"
         text += 'Max features: ' + self.__max_features
-        #text +=
 
         self._showText(self.__root_builder, text)
 

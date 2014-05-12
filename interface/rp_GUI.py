@@ -74,20 +74,15 @@ class WinResP(_base_GUI.BaseGUI):
         self.__num_neurons = spin.get_value_as_int()
 
     def onExecute(self, *args):
-        self.__window.destroy() ## ?!!! --
-
         resilient_propagation.load_CSV(self.__file_path)
         network = resilient_propagation.train(self.__percent_train, self.__num_cycle, self.__num_neurons, self.__func_name)
         data_set = resilient_propagation.get_data_set(100)
 
-        text = 'New win has created!\n'
-        text += 'Params:\n'
-        text += 'Algorithms: Back propagation\n'
-        text += 'Data set path: ' + self.__file_path + "\n"
+        text = self._getTextTitle('Resilient propagation', self.__file_path)
         text += 'Data set is binary: ' + ('true' if resilient_propagation.is_binary() else 'false') + "\n"
-        text += 'Func name: ' + self.__func_name
-
+        text += 'Func name: ' + self.__func_name + "\n"
         self._showText(self.__root_builder, text)
+        self.__window.destroy()
 
         if resilient_propagation.is_binary():
             control.draw_roc(network.activate, data_set)

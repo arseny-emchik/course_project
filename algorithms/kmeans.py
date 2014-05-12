@@ -39,11 +39,11 @@ class Kmeans(_interface.InterfaceML):
         km = KMeans(init=init, n_clusters=self.__n_digits, n_init=n_init)
         return km
 
-    def printResult(self, estimator):
+    def getResult(self, estimator):
         t0 = time()
         data = self.__data
         estimator.fit(data)
-        print('%.2fs    %i   %.3f   %.3f   %.3f   %.3f   %.3f   %.3f'
+        text = ('%.2fs    %i   %.3f   %.3f   %.3f   %.3f   %.3f   %.3f'
               % ((time() - t0), estimator.inertia_,
                  metrics.homogeneity_score(self.__labels, estimator.labels_),
                  metrics.completeness_score(self.__labels, estimator.labels_),
@@ -51,6 +51,7 @@ class Kmeans(_interface.InterfaceML):
                  metrics.adjusted_rand_score(self.__labels, estimator.labels_),
                  metrics.adjusted_mutual_info_score(self.__labels,  estimator.labels_),
                  metrics.silhouette_score(data, estimator.labels_, metric='euclidean', sample_size=300)))
+        return text
 
     def showPlot(self, km):
         reduced_data = PCA(n_components=2).fit_transform(self.__data)
@@ -93,7 +94,7 @@ class Kmeans(_interface.InterfaceML):
 
 _m = Kmeans()
 train = _m.train
-printResult = _m.printResult
+getResult = _m.getResult
 showPlot = _m.showPlot
 
 load_CSV = _m.load_CSV

@@ -80,10 +80,7 @@ class WinBackPr(_base_GUI.BaseGUI):
         network = back_propagation.train(self.__percent_train, self.__num_cycle, self.__num_neurons, self.__func_name)
         data_set = back_propagation.get_data_set(100)
 
-        text = 'New win has been created!\n'
-        text += 'Params:\n'
-        text += 'Algorithms: Back propagation\n'
-        text += 'Data set path: ' + self.__file_path + "\n"
+        text = self._getTextTitle('back_propagation', self.__file_path)
         text += 'Data set is binary: ' + ('true' if back_propagation.is_binary() else 'false') + "\n"
         text += 'Func name: ' + self.__func_name
 

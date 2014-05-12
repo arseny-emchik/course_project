@@ -44,11 +44,14 @@ class WinMSift(_base_GUI.BaseGUI):
         self.__window.destroy()
 
     def onExecute(self, *args):
-        self.__window.destroy() ## ?!!! --
-
         mshift.load_CSV(self.__file_path)
         mean_shift = mshift.train(m_quantile=self.__quantile, m_cluster_all=self.__cluster_all)
         data_set = mshift.get_data_set(100)
         mshift.showPlot3D()
+
+        text = self._getTextTitle('K-means', self.__file_path)
+        text += mshift.getResult()
+        self._showText(self.__root_builder, text)
+        self.__window.destroy()
 
 Class = WinMSift

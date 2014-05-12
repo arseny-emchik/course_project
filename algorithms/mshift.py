@@ -45,17 +45,18 @@ class MSC(_interface.InterfaceML):
 
         return ms
 
-    def printResult(self):
-        print('Estimated number of clusters: %d' % self.__n_clusters)
-        print("Homogeneity: %0.3f" % metrics.homogeneity_score(self.__labels_true, self.__labels))
-        print("Completeness: %0.3f" % metrics.completeness_score(self.__labels_true, self.__labels))
-        print("V-measure: %0.3f" % metrics.v_measure_score(self.__labels_true, self.__labels))
-        print("Adjusted Rand Index: %0.3f"
+    def getResult(self):
+        text = ('Estimated number of clusters: %d\n' % self.__n_clusters)
+        text += ("Homogeneity: %0.3f\n" % metrics.homogeneity_score(self.__labels_true, self.__labels))
+        text += ("Completeness: %0.3f\n" % metrics.completeness_score(self.__labels_true, self.__labels))
+        text += ("V-measure: %0.3f\n" % metrics.v_measure_score(self.__labels_true, self.__labels))
+        text += ("Adjusted Rand Index: %0.3f\n"
               % metrics.adjusted_rand_score(self.__labels_true, self.__labels))
-        print("Adjusted Mutual Information: %0.3f"
+        text += ("Adjusted Mutual Information: %0.3f\n"
               % metrics.adjusted_mutual_info_score(self.__labels_true, self.__labels))
-        print("Silhouette Coefficient: %0.3f"
+        text += ("Silhouette Coefficient: %0.3f"
               % metrics.silhouette_score(self.__data, self.__labels))
+        return text
 
     def showPlot3D(self):
         fig = pl.figure()
@@ -70,7 +71,7 @@ class MSC(_interface.InterfaceML):
 
 _m = MSC()
 train = _m.train
-printResult = _m.printResult
+getResult = _m.getResult
 showPlot3D = _m.showPlot3D
 
 load_CSV = _m.load_CSV

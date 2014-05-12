@@ -60,11 +60,14 @@ class WinKMeans(_base_GUI.BaseGUI):
         self.__window.destroy()
 
     def onExecute(self, *args):
-        self.__window.destroy() ## ?!!! --
-
         kmeans.load_CSV(self.__file_path)
         km = kmeans.train(init=self.__kmeans_init, n_init=self.__n_init)
-        kmeans.printResult(km)
         kmeans.showPlot(km)
+
+        text = self._getTextTitle('K-means', self.__file_path)
+        text += kmeans.getResult(km)
+        self._showText(self.__root_builder, text)
+
+        self.__window.destroy()
 
 Class = WinKMeans
