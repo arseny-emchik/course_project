@@ -15,7 +15,7 @@ class WinMSift(_base_GUI.BaseGUI):
     __window = None
 
     __file_path = None
-    __quantile = 0.15
+    __quantile = 0.02
     __cluster_all = False
 
     def __init__(self, root_builder, file_path):
@@ -44,14 +44,20 @@ class WinMSift(_base_GUI.BaseGUI):
         self.__window.destroy()
 
     def onExecute(self, *args):
-        mshift.load_CSV(self.__file_path)
-        mean_shift = mshift.train(m_quantile=self.__quantile, m_cluster_all=self.__cluster_all)
-        data_set = mshift.get_data_set(100)
-        mshift.showPlot3D()
+        try:
+            mshift.load_CSV(self.__file_path)
+            mean_shift = mshift.train(m_quantile=self.__quantile, m_cluster_all=self.__cluster_all)
+            data_set = mshift.get_data_set(100)
+            mshift.showPlot3D()
 
-        text = self._getTextTitle('K-means', self.__file_path)
-        text += mshift.getResult()
-        self._showText(self.__root_builder, text)
-        self.__window.destroy()
+            text = self._getTextTitle('K-means', self.__file_path)
+            text += mshift.getResult()
+            self._showText(self.__root_builder, text)
+            self.__window.destroy()
+        except:
+            text = 'Some problem.\nSet another params, please.'
+            self._showText(self.__root_builder, text)
+            self.__window.destroy()
+            return
 
 Class = WinMSift

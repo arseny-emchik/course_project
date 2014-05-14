@@ -86,22 +86,29 @@ class WinDecTree(_base_GUI.BaseGUI):
         self.__window.destroy()
 
     def onExecute(self, *args):
-        self.__window.destroy() ## ?!!! --
+        try:
+            decision_tree.load_CSV(self.__file_path)
+            clf = decision_tree.train(self.__percent_train, criterion=self.__tree_criterion, max_features=self.__max_features)
+            data_set = decision_tree.get_data_set(100)
 
-        decision_tree.load_CSV(self.__file_path)
-        clf = decision_tree.train(self.__percent_train, criterion=self.__tree_criterion, max_features=self.__max_features)
-        data_set = decision_tree.get_data_set(100)
+            text = self._getTextTitle('Decision Tree', self.__file_path)
+            text += 'Data set is binary: ' + ('true' if decision_tree.is_binary() else 'false') + "\n"
+            text += 'Tree criterion: ' + self.__tree_criterion + "\n"
+            text += 'Max features: ' + self.__max_features + "\n"
+            text += decision_tree.getResult(clf.predict, data_set)
 
-        text = self._getTextTitle('Decision Tree', self.__file_path)
-        text += 'Data set is binary: ' + ('true' if decision_tree.is_binary() else 'false') + "\n"
-        text += 'Tree criterion: ' + self.__tree_criterion + "\n"
-        text += 'Max features: ' + self.__max_features
+            self._showText(self.__root_builder, text)
 
-        self._showText(self.__root_builder, text)
+            if decision_tree.is_binary():
+                control.draw_roc(clf.predict, data_set)
 
-        if decision_tree.is_binary():
-            control.draw_roc(clf.predict, data_set)
+            control.draw_confusion_matrix(clf.predict, data_set)
+            self.__window.destroy()
+        except:
+            text = 'Some problem.\nSet another params, please.'
+            self._showText(self.__root_builder, text)
+            self.__window.destroy()
+            return
 
-        control.draw_confusion_matrix(clf.predict, data_set)
 
 Class = WinDecTree

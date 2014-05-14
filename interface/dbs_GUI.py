@@ -40,15 +40,21 @@ class WinDBS(_base_GUI.BaseGUI):
         self.__window.destroy()
 
     def onExecute(self, *args):
-        DBScan.load_CSV(self.__file_path)
-        DBScan.train(m_eps=self.__eps, m_min_sales=self.__min_samples)
-        DBScan.showPlot2D()
-        DBScan.showPlot3D()
+        try:
+            DBScan.load_CSV(self.__file_path)
+            DBScan.train(m_eps=self.__eps, m_min_sales=self.__min_samples)
+            DBScan.showPlot2D()
+            DBScan.showPlot3D()
 
-        text = self._getTextTitle('DBScan', self.__file_path)
-        text += DBScan.getResult()
-        self._showText(self.__root_builder, text)
+            text = self._getTextTitle('DBScan', self.__file_path)
+            text += DBScan.getResult()
+            self._showText(self.__root_builder, text)
 
-        self.__window.destroy()
+            self.__window.destroy()
+        except:
+            text = 'Some problem!\nSet another params, please.'
+            self._showText(self.__root_builder, text)
+            self.__window.destroy()
+            return
 
 Class = WinDBS

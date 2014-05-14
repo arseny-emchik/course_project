@@ -63,17 +63,23 @@ class WinSepVector(_base_GUI.BaseGUI):
         self.__window.destroy()
 
     def onExecute(self, *args):
-        support_vector.load_CSV(self.__file_path)
-        clf = support_vector.train(self.__percents, kernel=self.__kernel)
-        data_set = support_vector.get_data_set(100)
+        try:
+            support_vector.load_CSV(self.__file_path)
+            clf = support_vector.train(self.__percents, kernel=self.__kernel)
+            data_set = support_vector.get_data_set(100)
 
-        if support_vector.is_binary():
-            control.draw_roc(clf.predict, data_set)
-        control.draw_confusion_matrix(clf.predict, data_set)
+            if support_vector.is_binary():
+                control.draw_roc(clf.predict, data_set)
+            control.draw_confusion_matrix(clf.predict, data_set)
 
-        text = self._getTextTitle('Support vector machines', self.__file_path)
-        text += 'Data set is binary: ' + ('true' if support_vector.is_binary() else 'false')
-        self._showText(self.__root_builder, text)
-        self.__window.destroy()
+            text = self._getTextTitle('Support vector machines', self.__file_path)
+            text += 'Data set is binary: ' + ('true' if support_vector.is_binary() else 'false')
+            self._showText(self.__root_builder, text)
+            self.__window.destroy()
+        except:
+            text = 'Problem with DataSet.\nSet more percent, please.'
+            self._showText(self.__root_builder, text)
+            self.__window.destroy()
+            return
 
 Class = WinSepVector
