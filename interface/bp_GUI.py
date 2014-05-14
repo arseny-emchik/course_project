@@ -21,7 +21,7 @@ class WinBackPr(_base_GUI.BaseGUI):
     __file_path = None
     __num_neurons = 1
     __num_cycle = 1
-    __percent_train = 0
+    __percent_train = 1
     __func_name = None
 
     def __init__(self, root_builder, file_path):
@@ -58,25 +58,31 @@ class WinBackPr(_base_GUI.BaseGUI):
             return
         self.__func_name = FuncArr[index - 1]
 
-    def onChangePercent(self, spin):
-        self.__percent_train = spin.get_value_as_int()
-
     def onExit(self, *args):
         self.__window.destroy()
 
     def onChangePercent(self, spin):
         self.__percent_train = spin.get_value_as_int()
+        #print self.__percent_train
 
     def onChangeCycle(self, spin):
         self.__num_cycle = spin.get_value_as_int()
+        #print self.__num_cycle
 
     def onChangeNeurons(self, spin):
         self.__num_neurons = spin.get_value_as_int()
+        #print self.__num_neurons
 
     def onExecute(self, *args):
-        back_propagation.load_CSV(self.__file_path)
-        network = back_propagation.train(self.__percent_train, self.__num_cycle, self.__num_neurons, self.__func_name)
-        data_set = back_propagation.get_data_set(100)
+        try:
+            back_propagation.load_CSV(self.__file_path)
+            network = back_propagation.train(self.__percent_train, self.__num_cycle, self.__num_neurons, self.__func_name)
+            data_set = back_propagation.get_data_set(100)
+        except:
+            text = 'Problem with DataSet.\nSet more percent, please.'
+            self._showText(self.__root_builder, text)
+            self.__window.destroy()
+            return
 
         if back_propagation.is_binary():
             control.draw_roc(network.activate, data_set)
@@ -89,8 +95,7 @@ class WinBackPr(_base_GUI.BaseGUI):
         text += 'Num neurons: %i\n' % self.__num_neurons
         text += 'Num cycle: %i\n' % self.__num_cycle
         text += 'Percent train: %i\n ' % self.__percent_train
-        text += back_propagation.getResult(network, data_set)
-
+        text += back_propagation.getResult(network.activate, data_set)
 
         self._showText(self.__root_builder, text)
         self.__window.destroy()

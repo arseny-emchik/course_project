@@ -60,14 +60,20 @@ class WinKMeans(_base_GUI.BaseGUI):
         self.__window.destroy()
 
     def onExecute(self, *args):
-        kmeans.load_CSV(self.__file_path)
-        km = kmeans.train(init=self.__kmeans_init, n_init=self.__n_init)
-        kmeans.showPlot(km)
+        try:
+            kmeans.load_CSV(self.__file_path)
+            km = kmeans.train(init=self.__kmeans_init, n_init=self.__n_init)
+            kmeans.showPlot(km)
 
-        text = self._getTextTitle('K-means', self.__file_path)
-        text += kmeans.getResult(km)
-        self._showText(self.__root_builder, text)
+            text = self._getTextTitle('K-means', self.__file_path)
+            text += kmeans.getResult(km)
+            self._showText(self.__root_builder, text)
 
-        self.__window.destroy()
+            self.__window.destroy()
+        except:
+            text = 'Some problem.\nSet another params, please.'
+            self._showText(self.__root_builder, text)
+            self.__window.destroy()
+            return
 
 Class = WinKMeans

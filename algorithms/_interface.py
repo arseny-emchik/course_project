@@ -130,7 +130,7 @@ class InterfaceML:
         if self.is_binary():
             result += "Average precision: %f\n" % metrics.average_precision_score(y_true, y_predict)
             result += "Matthews correlation coefficient: %f\n" % metrics.matthews_corrcoef(y_true, y_predict)
-            result += "Area Under the Curve: %f\n" % metrics.roc_auc_score(y_true, y_predict)
+            result += "Area Under the Curve: %f" % metrics.roc_auc_score(y_true, y_predict)
 
         return result
 

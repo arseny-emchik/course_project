@@ -74,19 +74,27 @@ class WinResP(_base_GUI.BaseGUI):
         self.__num_neurons = spin.get_value_as_int()
 
     def onExecute(self, *args):
-        resilient_propagation.load_CSV(self.__file_path)
-        network = resilient_propagation.train(self.__percent_train, self.__num_cycle, self.__num_neurons, self.__func_name)
-        data_set = resilient_propagation.get_data_set(100)
+        try:
+            resilient_propagation.load_CSV(self.__file_path)
+            network = resilient_propagation.train(self.__percent_train, self.__num_cycle, self.__num_neurons, self.__func_name)
+            data_set = resilient_propagation.get_data_set(100)
 
-        text = self._getTextTitle('Resilient propagation', self.__file_path)
-        text += 'Data set is binary: ' + ('true' if resilient_propagation.is_binary() else 'false') + "\n"
-        text += 'Func name: ' + self.__func_name + "\n"
-        self._showText(self.__root_builder, text)
-        self.__window.destroy()
+            text = self._getTextTitle('Resilient propagation', self.__file_path)
+            text += 'Data set is binary: ' + ('true' if resilient_propagation.is_binary() else 'false') + "\n"
+            text += 'Func name: ' + self.__func_name + "\n"
+            text += resilient_propagation.getResult(network.activate, data_set) #??!
+            self._showText(self.__root_builder, text)
 
-        if resilient_propagation.is_binary():
-            control.draw_roc(network.activate, data_set)
+            if resilient_propagation.is_binary():
+                control.draw_roc(network.activate, data_set)
 
-        control.draw_confusion_matrix(network.activate, data_set)
+            control.draw_confusion_matrix(network.activate, data_set)
+            self.__window.destroy()
+        except:
+            text = 'Some problems!.\nMaybe set more percent, please.'
+            self._showText(self.__root_builder, text)
+            self.__window.destroy()
+            return
+
 
 Class = WinResP

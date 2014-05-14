@@ -3,6 +3,7 @@
 #           IMPORTS
 # =======================================================
 from gi.repository import Gtk
+from gi.repository import Gdk
 
 import sys
 import os
@@ -42,7 +43,17 @@ class Handler:
         self.__setCombobox()
 
         window = self.__builder.get_object("quality_assessment")
+
+        self.__changeColor(window)
         window.show_all()
+
+    def __changeColor(self, window):
+        eb = Gtk.EventBox()
+        textView = self.__builder.get_object("main_text_view")
+        eb.add(textView)
+        parse, color = Gdk.Color.parse('blue')
+        eb.modify_bg(Gtk.StateType.NORMAL, color)
+        window.add(eb)
 
     def __setCombobox(self):
         liststore = Gtk.ListStore(int, str)
