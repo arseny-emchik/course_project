@@ -82,6 +82,7 @@ class WinResP(_base_GUI.BaseGUI):
             text = self._getTextTitle('Resilient propagation', self.__file_path)
             text += 'Data set is binary: ' + ('true' if resilient_propagation.is_binary() else 'false') + "\n"
             text += 'Func name: ' + self.__func_name + "\n"
+            text += resilient_propagation.getResult(network.activate, data_set) #??!
             self._showText(self.__root_builder, text)
 
             if resilient_propagation.is_binary():

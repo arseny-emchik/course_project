@@ -73,7 +73,8 @@ class WinSepVector(_base_GUI.BaseGUI):
             control.draw_confusion_matrix(clf.predict, data_set)
 
             text = self._getTextTitle('Support vector machines', self.__file_path)
-            text += 'Data set is binary: ' + ('true' if support_vector.is_binary() else 'false')
+            text += 'Data set is binary: ' + ('true\n' if support_vector.is_binary() else 'false\n')
+            text += support_vector.getResult(clf.predict, data_set)
             self._showText(self.__root_builder, text)
             self.__window.destroy()
         except:
